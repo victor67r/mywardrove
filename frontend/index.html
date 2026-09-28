@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Wardrobe</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         CABECERA
+         ========================= -->
+
+    <header>
+
+        <h1>My Wardrobe</h1>
+
+        <p>Mi armario digital</p>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+         ========================= -->
+
+    <main>
+
+
+        <!-- =========================
+             CATEGORÍAS
+             ========================= -->
+
+        <section class="categorias">
+
+            <h2>Mi armario</h2>
+
+
+            <div class="categorias-container">
+
+                <button>Camisetas</button>
+
+                <button>Camisas</button>
+
+                <button>Pantalones</button>
+
+                <button>Sudaderas</button>
+
+                <button>Chaquetas</button>
+
+                <button>Zapatos</button>
+
+                <button>Accesorios</button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             PRENDAS
+             ========================= -->
+
+        <section class="prendas">
+
+
+            <div class="titulo-prendas">
+
+                <h2>Mis prendas</h2>
+
+                <button id="btn-nueva-prenda">
+                    + Añadir prenda
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 FORMULARIO
+                 ========================= -->
+
+            <div
+                id="formulario-prenda"
+                class="formulario-oculto"
+            >
+
+                <h3>Nueva prenda</h3>
+
+
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Nombre de la prenda"
+                >
+
+
+                <select id="categoria">
+
+                    <option value="">
+                        Selecciona una categoría
+                    </option>
+
+                    <option value="Camisetas">
+                        Camisetas
+                    </option>
+
+                    <option value="Camisas">
+                        Camisas
+                    </option>
+
+                    <option value="Pantalones">
+                        Pantalones
+                    </option>
+
+                    <option value="Sudaderas">
+                        Sudaderas
+                    </option>
+
+                    <option value="Chaquetas">
+                        Chaquetas
+                    </option>
+
+                    <option value="Zapatos">
+                        Zapatos
+                    </option>
+
+                    <option value="Accesorios">
+                        Accesorios
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    id="color"
+                    placeholder="Color"
+                >
+
+
+                <input
+                    type="text"
+                    id="marca"
+                    placeholder="Marca"
+                >
+
+
+                <button id="btn-guardar-prenda">
+                    Guardar prenda
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 LISTA DE PRENDAS
+                 ========================= -->
+
+            <div id="lista-prendas">
+
+                <!--
+                    JavaScript colocará
+                    aquí las prendas
+                -->
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+    <script src="js/app.js"></script>
+
+
+</body>
+
+</html>
