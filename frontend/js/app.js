@@ -5,7 +5,9 @@ const API_URL = "http://localhost:8080/prendas";
 // =========================
 
 async function cargarPrendas() {
+
     try {
+
         const respuesta = await fetch(API_URL);
 
         const prendas = await respuesta.json();
@@ -13,12 +15,14 @@ async function cargarPrendas() {
         mostrarPrendas(prendas);
 
     } catch (error) {
+
         console.error(
             "Error al cargar las prendas:",
             error
         );
     }
 }
+
 
 // =========================
 // MOSTRAR PRENDAS
@@ -42,7 +46,10 @@ function mostrarPrendas(prendas) {
 
         let imagenHTML;
 
-        // Si la prenda tiene imagen
+        // =========================
+        // IMAGEN
+        // =========================
+
         if (prenda.imagen) {
 
             imagenHTML = `
@@ -54,11 +61,15 @@ function mostrarPrendas(prendas) {
 
         } else {
 
-            // Si no tiene imagen
             imagenHTML = `
                 <span>👕</span>
             `;
         }
+
+
+        // =========================
+        // TARJETA
+        // =========================
 
         tarjeta.innerHTML = `
 
@@ -84,12 +95,20 @@ function mostrarPrendas(prendas) {
                     Color: ${prenda.color}
                 </p>
 
+                <button
+                    class="btn-eliminar"
+                    onclick="eliminarPrenda(${prenda.id})"
+                >
+                    🗑️ Eliminar
+                </button>
+
             </div>
         `;
 
         lista.appendChild(tarjeta);
     });
 }
+
 
 // =========================
 // MOSTRAR / OCULTAR FORMULARIO
@@ -115,6 +134,7 @@ btnNuevaPrenda.addEventListener(
 
     }
 );
+
 
 // =========================
 // GUARDAR PRENDA
@@ -157,9 +177,11 @@ btnGuardarPrenda.addEventListener(
         const archivo =
             inputImagen.files[0];
 
+
         try {
 
             let nombreImagen = "";
+
 
             // =========================
             // SUBIR IMAGEN
@@ -200,6 +222,7 @@ btnGuardarPrenda.addEventListener(
                 );
             }
 
+
             // =========================
             // CREAR PRENDA
             // =========================
@@ -216,6 +239,7 @@ btnGuardarPrenda.addEventListener(
 
                 imagen: nombreImagen
             };
+
 
             const respuesta =
                 await fetch(
@@ -235,6 +259,7 @@ btnGuardarPrenda.addEventListener(
                     }
                 );
 
+
             if (!respuesta.ok) {
 
                 throw new Error(
@@ -242,9 +267,11 @@ btnGuardarPrenda.addEventListener(
                 );
             }
 
+
             console.log(
                 "Prenda guardada correctamente"
             );
+
 
             // =========================
             // LIMPIAR FORMULARIO
@@ -270,15 +297,22 @@ btnGuardarPrenda.addEventListener(
                 "imagen"
             ).value = "";
 
-            // Ocultar formulario
+
+            // =========================
+            // OCULTAR FORMULARIO
+            // =========================
 
             formularioPrenda.classList.add(
                 "formulario-oculto"
             );
 
-            // Recargar prendas
+
+            // =========================
+            // RECARGAR PRENDAS
+            // =========================
 
             cargarPrendas();
+
 
         } catch (error) {
 
@@ -289,6 +323,63 @@ btnGuardarPrenda.addEventListener(
         }
     }
 );
+
+
+// =========================
+// ELIMINAR PRENDA
+// =========================
+
+async function eliminarPrenda(id) {
+
+    const confirmar = confirm(
+        "¿Seguro que quieres eliminar esta prenda?"
+    );
+
+
+    if (!confirmar) {
+
+        return;
+    }
+
+
+    try {
+
+        const respuesta =
+            await fetch(
+                `${API_URL}/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudo eliminar la prenda"
+            );
+        }
+
+
+        console.log(
+            "Prenda eliminada correctamente"
+        );
+
+
+        // Volver a cargar las prendas
+
+        cargarPrendas();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al eliminar:",
+            error
+        );
+    }
+}
+
 
 // =========================
 // INICIAR APLICACIÓN

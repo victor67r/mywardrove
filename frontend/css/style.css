@@ -358,3 +358,25 @@ h2 {
     height: 100%;
     object-fit: cover;
 }
+
+.btn-eliminar {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #e74c3c;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b;
+}
+
+.imagen-prenda img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
