@@ -1,5 +1,9 @@
 const API_URL = "http://localhost:8080/prendas";
 
+// =========================
+// CARGAR PRENDAS
+// =========================
+
 async function cargarPrendas() {
 
     try {
@@ -18,6 +22,10 @@ async function cargarPrendas() {
 }
 
 
+// =========================
+// MOSTRAR PRENDAS
+// =========================
+
 function mostrarPrendas(prendas) {
 
     const lista = document.getElementById("lista-prendas");
@@ -31,11 +39,13 @@ function mostrarPrendas(prendas) {
         tarjeta.classList.add("tarjeta-prenda");
 
         tarjeta.innerHTML = `
+
             <div class="imagen-prenda">
                 <span>👕</span>
             </div>
 
             <div class="informacion-prenda">
+
                 <h3>${prenda.nombre}</h3>
 
                 <p>${prenda.marca}</p>
@@ -47,20 +57,26 @@ function mostrarPrendas(prendas) {
                 <p class="color">
                     Color: ${prenda.color}
                 </p>
+
             </div>
+
         `;
 
         lista.appendChild(tarjeta);
+
     });
 }
 
 
-cargarPrendas();
+// =========================
+// MOSTRAR / OCULTAR FORMULARIO
+// =========================
 
-// Botón para mostrar/ocultar el formulario
+const btnNuevaPrenda =
+    document.getElementById("btn-nueva-prenda");
 
-const btnNuevaPrenda = document.getElementById("btn-nueva-prenda");
-const formularioPrenda = document.getElementById("formulario-prenda");
+const formularioPrenda =
+    document.getElementById("formulario-prenda");
 
 btnNuevaPrenda.addEventListener("click", () => {
 
@@ -68,77 +84,167 @@ btnNuevaPrenda.addEventListener("click", () => {
 
 });
 
-// Botón para guardar una prenda
 
-const btnGuardarPrenda = document.getElementById("btn-guardar-prenda");
+// =========================
+// GUARDAR PRENDA
+// =========================
+
+const btnGuardarPrenda =
+    document.getElementById("btn-guardar-prenda");
 
 btnGuardarPrenda.addEventListener("click", async () => {
 
-    // Recoger los datos del formulario
+    const nombre =
+        document.getElementById("nombre").value;
 
-    const nombre = document.getElementById("nombre").value;
-    const categoria = document.getElementById("categoria").value;
-    const color = document.getElementById("color").value;
-    const marca = document.getElementById("marca").value;
+    const categoria =
+        document.getElementById("categoria").value;
 
+    const color =
+        document.getElementById("color").value;
 
-    // Crear el objeto que enviaremos al backend
-
-    const nuevaPrenda = {
-
-        nombre: nombre,
-        categoria: categoria,
-        color: color,
-        marca: marca
-
-    };
+    const marca =
+        document.getElementById("marca").value;
 
 
-    // Enviar la prenda al backend
+    // =========================
+    // OBTENER IMAGEN
+    // =========================
+
+    const inputImagen =
+        document.getElementById("imagen");
+
+    const archivo =
+        inputImagen.files[0];
+
 
     try {
 
-        const respuesta = await fetch(API_URL, {
+        // =========================
+        // SUBIR IMAGEN
+        // =========================
 
-            method: "POST",
+        let nombreImagen = "";
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        if (archivo) {
 
-            body: JSON.stringify(nuevaPrenda)
+            const formularioImagen =
+                new FormData();
 
-        });
+            formularioImagen.append(
+                "imagen",
+                archivo
+            );
+
+            const respuestaImagen =
+                await fetch(
+                    API_URL + "/imagen",
+                    {
+                        method: "POST",
+                        body: formularioImagen
+                    }
+                );
+
+            if (!respuestaImagen.ok) {
+
+                throw new Error(
+                    "No se pudo subir la imagen"
+                );
+
+            }
+
+            nombreImagen =
+                await respuestaImagen.text();
+
+            console.log(
+                "Imagen guardada:",
+                nombreImagen
+            );
+        }
 
 
-        // Comprobar si todo ha ido bien
+        // =========================
+        // CREAR PRENDA
+        // =========================
 
-        if (respuesta.ok) {
+        const nuevaPrenda = {
 
-            console.log("Prenda guardada correctamente");
+            nombre: nombre,
 
-            // Limpiar formulario
+            categoria: categoria,
 
-            document.getElementById("nombre").value = "";
-            document.getElementById("categoria").value = "";
-            document.getElementById("color").value = "";
-            document.getElementById("marca").value = "";
+            color: color,
 
+            marca: marca,
 
-            // Ocultar formulario
+            imagen: nombreImagen
 
-            formularioPrenda.classList.add("formulario-oculto");
+        };
 
 
-            // Volver a cargar las prendas
+        // =========================
+        // GUARDAR EN MYSQL
+        // =========================
 
-            cargarPrendas();
+        const respuesta =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
 
-        } else {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-            console.error("Error al guardar la prenda");
+                    body: JSON.stringify(nuevaPrenda)
+                }
+            );
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudo guardar la prenda"
+            );
 
         }
+
+
+        console.log(
+            "Prenda guardada correctamente"
+        );
+
+
+        // =========================
+        // LIMPIAR FORMULARIO
+        // =========================
+
+        document.getElementById("nombre").value = "";
+
+        document.getElementById("categoria").value = "";
+
+        document.getElementById("color").value = "";
+
+        document.getElementById("marca").value = "";
+
+        document.getElementById("imagen").value = "";
+
+
+        // =========================
+        // OCULTAR FORMULARIO
+        // =========================
+
+        formularioPrenda.classList.add(
+            "formulario-oculto"
+        );
+
+
+        // =========================
+        // ACTUALIZAR LISTA
+        // =========================
+
+        cargarPrendas();
+
 
     } catch (error) {
 
@@ -147,3 +253,10 @@ btnGuardarPrenda.addEventListener("click", async () => {
     }
 
 });
+
+
+// =========================
+// CARGAR AL INICIAR
+// =========================
+
+cargarPrendas();
