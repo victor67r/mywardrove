@@ -2,6 +2,11 @@ package com.victor.mywardrove.controller;
 
 import com.victor.mywardrove.entity.Prenda;
 import com.victor.mywardrove.service.PrendaService;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,42 +29,35 @@ public class PrendaController {
         this.prendaService = prendaService;
     }
 
-
     // =========================
     // OBTENER TODAS LAS PRENDAS
     // =========================
 
     @GetMapping
     public List<Prenda> obtenerTodas() {
-
         return prendaService.obtenerTodas();
     }
 
-
     // =========================
-    // CREAR UNA NUEVA PRENDA
+    // CREAR PRENDA
     // =========================
 
     @PostMapping
     public Prenda crear(@RequestBody Prenda prenda) {
-
         return prendaService.guardar(prenda);
     }
 
-
     // =========================
-    // ELIMINAR UNA PRENDA
+    // ELIMINAR PRENDA
     // =========================
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
-
         prendaService.eliminar(id);
     }
 
-
     // =========================
-    // SUBIR UNA IMAGEN
+    // SUBIR IMAGEN
     // =========================
 
     @PostMapping("/imagen")
@@ -68,65 +66,115 @@ public class PrendaController {
 
         try {
 
-            // Mostrar información en la consola
             System.out.println(
-                "Archivo recibido: "
-                + imagen.getOriginalFilename()
+                    "Archivo recibido: "
+                            + imagen.getOriginalFilename()
             );
 
             System.out.println(
-                "Tamaño: "
-                + imagen.getSize()
-                + " bytes"
+                    "Tamaño: "
+                            + imagen.getSize()
+                            + " bytes"
             );
 
-
-            // =========================
-            // CARPETA DE IMÁGENES
-            // =========================
-
-            Path carpeta = Paths.get("mywardrove", "uploads");
+            Path carpeta = Paths.get(
+                    "mywardrove",
+                    "uploads"
+            );
 
             Files.createDirectories(carpeta);
 
-
-            // =========================
-            // RUTA FINAL DE LA IMAGEN
-            // =========================
-
-            Path ruta =
-                carpeta.resolve(
+            Path ruta = carpeta.resolve(
                     imagen.getOriginalFilename()
-                );
-
-
-            // =========================
-            // GUARDAR IMAGEN
-            // =========================
+            );
 
             Files.copy(
-                imagen.getInputStream(),
-                ruta,
-                StandardCopyOption.REPLACE_EXISTING
+                    imagen.getInputStream(),
+                    ruta,
+                    StandardCopyOption.REPLACE_EXISTING
             );
 
-
-            // Mostrar dónde se ha guardado
             System.out.println(
-                "Imagen guardada en: "
-                + ruta.toAbsolutePath()
+                    "Imagen guardada en: "
+                            + ruta.toAbsolutePath()
             );
 
-
-            // Devolver nombre de la imagen
             return imagen.getOriginalFilename();
-
 
         } catch (IOException e) {
 
             e.printStackTrace();
 
             return "Error al guardar la imagen";
+        }
+    }
+
+    // =========================
+    // MOSTRAR IMAGEN
+    // =========================
+
+    @GetMapping("/imagen/{nombre}")
+    public ResponseEntity<Resource> obtenerImagen(
+            @PathVariable String nombre) {
+
+        try {
+
+            Path ruta = Paths.get(
+                    "mywardrove",
+                    "uploads",
+                    nombre
+            );
+
+            System.out.println(
+                    "Buscando imagen en:"
+            );
+
+            System.out.println(
+                    ruta.toAbsolutePath()
+            );
+
+            Resource recurso =
+                    new UrlResource(
+                            ruta.toUri()
+                    );
+
+            if (!recurso.exists()
+                    || !recurso.isReadable()) {
+
+                throw new RuntimeException(
+                        "La imagen no existe: "
+                                + ruta.toAbsolutePath()
+                );
+            }
+
+            String tipoContenido =
+                    Files.probeContentType(ruta);
+
+            if (tipoContenido == null) {
+                tipoContenido =
+                        "application/octet-stream";
+            }
+
+            System.out.println(
+                    "Tipo de contenido: "
+                            + tipoContenido
+            );
+
+            return ResponseEntity.ok()
+                    .header(
+                            "Content-Type",
+                            tipoContenido
+                    )
+                    .body(recurso);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "No se pudo cargar la imagen",
+                    e
+            );
         }
     }
 }
