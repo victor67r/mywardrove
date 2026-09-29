@@ -380,3 +380,36 @@ h2 {
     height: 100%;
     object-fit: cover;
 }
+
+.botones-prenda {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.btn-editar,
+.btn-eliminar {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-editar {
+    background-color: #3498db;
+}
+
+.btn-editar:hover {
+    background-color: #2980b9;
+}
+
+.btn-eliminar {
+    background-color: #e74c3c;
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b;
+}

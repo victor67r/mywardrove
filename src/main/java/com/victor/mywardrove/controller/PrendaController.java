@@ -48,6 +48,20 @@ public class PrendaController {
     }
 
     // =========================
+    // EDITAR PRENDA
+    // =========================
+
+    @PutMapping("/{id}")
+    public Prenda editar(
+            @PathVariable Long id,
+            @RequestBody Prenda prenda) {
+
+        prenda.setId(id);
+
+        return prendaService.guardar(prenda);
+    }
+
+    // =========================
     // ELIMINAR PRENDA
     // =========================
 
@@ -151,6 +165,7 @@ public class PrendaController {
                     Files.probeContentType(ruta);
 
             if (tipoContenido == null) {
+
                 tipoContenido =
                         "application/octet-stream";
             }

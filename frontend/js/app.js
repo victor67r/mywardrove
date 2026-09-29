@@ -1,5 +1,9 @@
 const API_URL = "http://localhost:8080/prendas";
 
+// Variable para saber si estamos editando
+let prendaEditandoId = null;
+
+
 // =========================
 // CARGAR PRENDAS
 // =========================
@@ -46,10 +50,6 @@ function mostrarPrendas(prendas) {
 
         let imagenHTML;
 
-        // =========================
-        // IMAGEN
-        // =========================
-
         if (prenda.imagen) {
 
             imagenHTML = `
@@ -66,10 +66,6 @@ function mostrarPrendas(prendas) {
             `;
         }
 
-
-        // =========================
-        // TARJETA
-        // =========================
 
         tarjeta.innerHTML = `
 
@@ -95,12 +91,23 @@ function mostrarPrendas(prendas) {
                     Color: ${prenda.color}
                 </p>
 
-                <button
-                    class="btn-eliminar"
-                    onclick="eliminarPrenda(${prenda.id})"
-                >
-                    🗑️ Eliminar
-                </button>
+                <div class="botones-prenda">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarPrenda(${prenda.id})"
+                    >
+                        ✏️ Editar
+                    </button>
+
+                    <button
+                        class="btn-eliminar"
+                        onclick="eliminarPrenda(${prenda.id})"
+                    >
+                        🗑️ Eliminar
+                    </button>
+
+                </div>
 
             </div>
         `;
@@ -128,16 +135,31 @@ btnNuevaPrenda.addEventListener(
     "click",
     () => {
 
+        // Estamos creando una prenda nueva
+        prendaEditandoId = null;
+
+        // Cambiar título
+        document.querySelector(
+            "#formulario-prenda h3"
+        ).textContent = "Nueva prenda";
+
+        // Cambiar texto del botón
+        btnGuardarPrenda.textContent =
+            "Guardar prenda";
+
+        // Limpiar formulario
+        limpiarFormulario();
+
+        // Mostrar formulario
         formularioPrenda.classList.toggle(
             "formulario-oculto"
         );
-
     }
 );
 
 
 // =========================
-// GUARDAR PRENDA
+// BOTÓN GUARDAR
 // =========================
 
 const btnGuardarPrenda =
@@ -184,132 +206,168 @@ btnGuardarPrenda.addEventListener(
 
 
             // =========================
-            // SUBIR IMAGEN
+            // SI ESTAMOS EDITANDO
             // =========================
 
-            if (archivo) {
+            if (prendaEditandoId !== null) {
 
-                const formularioImagen =
-                    new FormData();
+                // Primero mantenemos la imagen
+                // actual si no se selecciona otra
 
-                formularioImagen.append(
-                    "imagen",
-                    archivo
-                );
+                const prendas =
+                    await fetch(API_URL)
+                        .then(respuesta =>
+                            respuesta.json()
+                        );
 
-                const respuestaImagen =
+                const prendaActual =
+                    prendas.find(
+                        prenda =>
+                            prenda.id ===
+                            prendaEditandoId
+                    );
+
+                nombreImagen =
+                    prendaActual.imagen;
+
+
+                // Si seleccionamos una imagen nueva
+                // la subimos
+
+                if (archivo) {
+
+                    nombreImagen =
+                        await subirImagen(
+                            archivo
+                        );
+                }
+
+
+                const prendaActualizada = {
+
+                    nombre: nombre,
+
+                    categoria: categoria,
+
+                    color: color,
+
+                    marca: marca,
+
+                    imagen: nombreImagen
+                };
+
+
+                const respuesta =
                     await fetch(
-                        API_URL + "/imagen",
+                        `${API_URL}/${prendaEditandoId}`,
                         {
-                            method: "POST",
-                            body: formularioImagen
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    prendaActualizada
+                                )
                         }
                     );
 
-                if (!respuestaImagen.ok) {
+
+                if (!respuesta.ok) {
 
                     throw new Error(
-                        "No se pudo subir la imagen"
+                        "No se pudo actualizar la prenda"
                     );
                 }
 
-                nombreImagen =
-                    await respuestaImagen.text();
 
                 console.log(
-                    "Imagen guardada:",
-                    nombreImagen
+                    "Prenda actualizada correctamente"
+                );
+
+            } else {
+
+
+                // =========================
+                // CREAR PRENDA NUEVA
+                // =========================
+
+                if (archivo) {
+
+                    nombreImagen =
+                        await subirImagen(
+                            archivo
+                        );
+                }
+
+
+                const nuevaPrenda = {
+
+                    nombre: nombre,
+
+                    categoria: categoria,
+
+                    color: color,
+
+                    marca: marca,
+
+                    imagen: nombreImagen
+                };
+
+
+                const respuesta =
+                    await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    nuevaPrenda
+                                )
+                        }
+                    );
+
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        "No se pudo guardar la prenda"
+                    );
+                }
+
+
+                console.log(
+                    "Prenda guardada correctamente"
                 );
             }
 
 
             // =========================
-            // CREAR PRENDA
+            // LIMPIAR Y CERRAR
             // =========================
 
-            const nuevaPrenda = {
+            limpiarFormulario();
 
-                nombre: nombre,
-
-                categoria: categoria,
-
-                color: color,
-
-                marca: marca,
-
-                imagen: nombreImagen
-            };
-
-
-            const respuesta =
-                await fetch(
-                    API_URL,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify(
-                                nuevaPrenda
-                            )
-                    }
-                );
-
-
-            if (!respuesta.ok) {
-
-                throw new Error(
-                    "No se pudo guardar la prenda"
-                );
-            }
-
-
-            console.log(
-                "Prenda guardada correctamente"
-            );
-
-
-            // =========================
-            // LIMPIAR FORMULARIO
-            // =========================
-
-            document.getElementById(
-                "nombre"
-            ).value = "";
-
-            document.getElementById(
-                "categoria"
-            ).value = "";
-
-            document.getElementById(
-                "color"
-            ).value = "";
-
-            document.getElementById(
-                "marca"
-            ).value = "";
-
-            document.getElementById(
-                "imagen"
-            ).value = "";
-
-
-            // =========================
-            // OCULTAR FORMULARIO
-            // =========================
+            prendaEditandoId = null;
 
             formularioPrenda.classList.add(
                 "formulario-oculto"
             );
 
+            btnGuardarPrenda.textContent =
+                "Guardar prenda";
 
-            // =========================
-            // RECARGAR PRENDAS
-            // =========================
+
+            // Actualizar prendas
 
             cargarPrendas();
 
@@ -326,14 +384,167 @@ btnGuardarPrenda.addEventListener(
 
 
 // =========================
+// SUBIR IMAGEN
+// =========================
+
+async function subirImagen(archivo) {
+
+    const formularioImagen =
+        new FormData();
+
+    formularioImagen.append(
+        "imagen",
+        archivo
+    );
+
+
+    const respuestaImagen =
+        await fetch(
+            API_URL + "/imagen",
+            {
+                method: "POST",
+                body: formularioImagen
+            }
+        );
+
+
+    if (!respuestaImagen.ok) {
+
+        throw new Error(
+            "No se pudo subir la imagen"
+        );
+    }
+
+
+    return await respuestaImagen.text();
+}
+
+
+// =========================
+// EDITAR PRENDA
+// =========================
+
+async function editarPrenda(id) {
+
+    try {
+
+        const respuesta =
+            await fetch(API_URL);
+
+        const prendas =
+            await respuesta.json();
+
+        const prenda =
+            prendas.find(
+                prenda =>
+                    prenda.id === id
+            );
+
+
+        if (!prenda) {
+
+            throw new Error(
+                "No se encontró la prenda"
+            );
+        }
+
+
+        // Guardamos el ID
+        prendaEditandoId = id;
+
+
+        // Rellenamos formulario
+
+        document.getElementById(
+            "nombre"
+        ).value = prenda.nombre || "";
+
+        document.getElementById(
+            "categoria"
+        ).value = prenda.categoria || "";
+
+        document.getElementById(
+            "color"
+        ).value = prenda.color || "";
+
+        document.getElementById(
+            "marca"
+        ).value = prenda.marca || "";
+
+
+        // Cambiamos textos
+
+        document.querySelector(
+            "#formulario-prenda h3"
+        ).textContent =
+            "Editar prenda";
+
+        btnGuardarPrenda.textContent =
+            "Guardar cambios";
+
+
+        // Mostrar formulario
+
+        formularioPrenda.classList.remove(
+            "formulario-oculto"
+        );
+
+
+        // Llevar al formulario
+
+        formularioPrenda.scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al editar:",
+            error
+        );
+    }
+}
+
+
+// =========================
+// LIMPIAR FORMULARIO
+// =========================
+
+function limpiarFormulario() {
+
+    document.getElementById(
+        "nombre"
+    ).value = "";
+
+    document.getElementById(
+        "categoria"
+    ).value = "";
+
+    document.getElementById(
+        "color"
+    ).value = "";
+
+    document.getElementById(
+        "marca"
+    ).value = "";
+
+    document.getElementById(
+        "imagen"
+    ).value = "";
+}
+
+
+// =========================
 // ELIMINAR PRENDA
 // =========================
 
 async function eliminarPrenda(id) {
 
-    const confirmar = confirm(
-        "¿Seguro que quieres eliminar esta prenda?"
-    );
+    const confirmar =
+        confirm(
+            "¿Seguro que quieres eliminar esta prenda?"
+        );
 
 
     if (!confirmar) {
@@ -365,8 +576,6 @@ async function eliminarPrenda(id) {
             "Prenda eliminada correctamente"
         );
 
-
-        // Volver a cargar las prendas
 
         cargarPrendas();
 
