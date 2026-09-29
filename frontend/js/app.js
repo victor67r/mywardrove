@@ -54,10 +54,6 @@ function mostrarPrendas(prendas) {
         );
 
 
-        // ========================================
-        // IMAGEN
-        // ========================================
-
         let imagenHTML;
 
 
@@ -77,10 +73,6 @@ function mostrarPrendas(prendas) {
             `;
         }
 
-
-        // ========================================
-        // TARJETA
-        // ========================================
 
         tarjeta.innerHTML = `
 
@@ -106,7 +98,6 @@ function mostrarPrendas(prendas) {
                     Color: ${prenda.color}
                 </p>
 
-
                 <div class="botones-prenda">
 
                     <button
@@ -115,7 +106,6 @@ function mostrarPrendas(prendas) {
                     >
                         ✏️ Editar
                     </button>
-
 
                     <button
                         class="btn-eliminar"
@@ -159,19 +149,15 @@ btnNuevaPrenda.addEventListener(
 
         prendaEditandoId = null;
 
-
         document.querySelector(
             "#formulario-prenda h3"
         ).textContent =
             "Nueva prenda";
 
-
         btnGuardarPrenda.textContent =
             "Guardar prenda";
 
-
         limpiarFormulario();
-
 
         formularioPrenda.classList.toggle(
             "formulario-oculto"
@@ -260,7 +246,6 @@ btnGuardarPrenda.addEventListener(
                     prendaActual.imagen;
 
 
-                // Si se selecciona una nueva imagen
                 if (archivo) {
 
                     nombreImagen =
@@ -384,20 +369,13 @@ btnGuardarPrenda.addEventListener(
             }
 
 
-            // ========================================
-            // LIMPIAR
-            // ========================================
-
             limpiarFormulario();
 
-
             prendaEditandoId = null;
-
 
             formularioPrenda.classList.add(
                 "formulario-oculto"
             );
-
 
             btnGuardarPrenda.textContent =
                 "Guardar prenda";
@@ -652,8 +630,6 @@ botonesCategoria.forEach(
                     boton.dataset.categoria;
 
 
-                // Quitar activo de todos
-
                 botonesCategoria.forEach(
                     otroBoton => {
 
@@ -664,8 +640,6 @@ botonesCategoria.forEach(
                     }
                 );
 
-
-                // Activar botón pulsado
 
                 boton.classList.add(
                     "activa"
@@ -716,6 +690,98 @@ botonesCategoria.forEach(
                     );
 
                 }
+
+            }
+        );
+
+    }
+);
+
+
+// ========================================
+// MODAL GENERAR OUTFIT
+// ========================================
+
+const btnGenerarOutfit =
+    document.getElementById(
+        "btn-generar-outfit"
+    );
+
+
+const modalOutfit =
+    document.getElementById(
+        "modal-outfit"
+    );
+
+
+const btnCerrarModal =
+    document.getElementById(
+        "btn-cerrar-modal"
+    );
+
+
+// ========================================
+// ABRIR MODAL
+// ========================================
+
+btnGenerarOutfit.addEventListener(
+    "click",
+    () => {
+
+        modalOutfit.classList.remove(
+            "modal-oculto"
+        );
+
+    }
+);
+
+
+// ========================================
+// CERRAR MODAL
+// ========================================
+
+btnCerrarModal.addEventListener(
+    "click",
+    () => {
+
+        modalOutfit.classList.add(
+            "modal-oculto"
+        );
+
+    }
+);
+
+
+// ========================================
+// SELECCIONAR OCASIÓN
+// ========================================
+
+const botonesOcasion =
+    document.querySelectorAll(
+        ".btn-ocasion"
+    );
+
+
+botonesOcasion.forEach(
+    boton => {
+
+        boton.addEventListener(
+            "click",
+            () => {
+
+                const ocasion =
+                    boton.dataset.ocasion;
+
+
+                console.log(
+                    "Ocasión seleccionada:",
+                    ocasion
+                );
+
+
+                modalOutfit.classList.add(
+                    "modal-oculto"
+                );
 
             }
         );
