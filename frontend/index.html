@@ -19,13 +19,7 @@
 
 </head>
 
-
 <body>
-
-
-    <!-- =========================
-         CABECERA
-         ========================= -->
 
     <header>
 
@@ -35,51 +29,76 @@
 
     </header>
 
-
-    <!-- =========================
-         CONTENIDO PRINCIPAL
-         ========================= -->
-
     <main>
-
-
-        <!-- =========================
-             CATEGORÍAS
-             ========================= -->
 
         <section class="categorias">
 
             <h2>Mi armario</h2>
 
-
             <div class="categorias-container">
 
-                <button>Camisetas</button>
+                <button
+                    class="btn-categoria activa"
+                    data-categoria="Todas"
+                >
+                    👕 Todas
+                </button>
 
-                <button>Camisas</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Camisetas"
+                >
+                    Camisetas
+                </button>
 
-                <button>Pantalones</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Camisas"
+                >
+                    Camisas
+                </button>
 
-                <button>Sudaderas</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Pantalones"
+                >
+                    Pantalones
+                </button>
 
-                <button>Chaquetas</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Sudaderas"
+                >
+                    Sudaderas
+                </button>
 
-                <button>Zapatos</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Chaquetas"
+                >
+                    Chaquetas
+                </button>
 
-                <button>Accesorios</button>
+                <button
+                    class="btn-categoria"
+                    data-categoria="Zapatos"
+                >
+                    Zapatos
+                </button>
+
+                <button
+                    class="btn-categoria"
+                    data-categoria="Accesorios"
+                >
+                    Accesorios
+                </button>
 
             </div>
 
         </section>
 
 
-
-        <!-- =========================
-             PRENDAS
-             ========================= -->
-
         <section class="prendas">
-
 
             <div class="titulo-prendas">
 
@@ -92,11 +111,6 @@
             </div>
 
 
-
-            <!-- =========================
-                 FORMULARIO
-                 ========================= -->
-
             <div
                 id="formulario-prenda"
                 class="formulario-oculto"
@@ -104,13 +118,11 @@
 
                 <h3>Nueva prenda</h3>
 
-
                 <input
                     type="text"
                     id="nombre"
                     placeholder="Nombre de la prenda"
                 >
-
 
                 <select id="categoria">
 
@@ -148,13 +160,11 @@
 
                 </select>
 
-
                 <input
                     type="text"
                     id="color"
                     placeholder="Color"
                 >
-
 
                 <input
                     type="text"
@@ -163,11 +173,10 @@
                 >
 
                 <input
-                type="file"
-                id="imagen"
-                accept="image/*"
-            >
-
+                    type="file"
+                    id="imagen"
+                    accept="image/*"
+                >
 
                 <button id="btn-guardar-prenda">
                     Guardar prenda
@@ -176,33 +185,18 @@
             </div>
 
 
-
-            <!-- =========================
-                 LISTA DE PRENDAS
-                 ========================= -->
-
             <div id="lista-prendas">
 
-                <!--
-                    JavaScript colocará
-                    aquí las prendas
-                -->
+                <!-- JavaScript colocará aquí las prendas -->
 
             </div>
 
-
         </section>
-
 
     </main>
 
 
-    <!-- =========================
-         JAVASCRIPT
-         ========================= -->
-
     <script src="js/app.js"></script>
-
 
 </body>
 

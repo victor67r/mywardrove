@@ -1,12 +1,16 @@
 const API_URL = "http://localhost:8080/prendas";
 
-// Variable para saber si estamos editando
+
+// ========================================
+// VARIABLES
+// ========================================
+
 let prendaEditandoId = null;
 
 
-// =========================
+// ========================================
 // CARGAR PRENDAS
-// =========================
+// ========================================
 
 async function cargarPrendas() {
 
@@ -28,9 +32,9 @@ async function cargarPrendas() {
 }
 
 
-// =========================
+// ========================================
 // MOSTRAR PRENDAS
-// =========================
+// ========================================
 
 function mostrarPrendas(prendas) {
 
@@ -38,6 +42,7 @@ function mostrarPrendas(prendas) {
         document.getElementById("lista-prendas");
 
     lista.innerHTML = "";
+
 
     prendas.forEach(prenda => {
 
@@ -48,7 +53,13 @@ function mostrarPrendas(prendas) {
             "tarjeta-prenda"
         );
 
+
+        // ========================================
+        // IMAGEN
+        // ========================================
+
         let imagenHTML;
+
 
         if (prenda.imagen) {
 
@@ -66,6 +77,10 @@ function mostrarPrendas(prendas) {
             `;
         }
 
+
+        // ========================================
+        // TARJETA
+        // ========================================
 
         tarjeta.innerHTML = `
 
@@ -91,6 +106,7 @@ function mostrarPrendas(prendas) {
                     Color: ${prenda.color}
                 </p>
 
+
                 <div class="botones-prenda">
 
                     <button
@@ -99,6 +115,7 @@ function mostrarPrendas(prendas) {
                     >
                         ✏️ Editar
                     </button>
+
 
                     <button
                         class="btn-eliminar"
@@ -110,62 +127,69 @@ function mostrarPrendas(prendas) {
                 </div>
 
             </div>
+
         `;
 
+
         lista.appendChild(tarjeta);
+
     });
 }
 
 
-// =========================
-// MOSTRAR / OCULTAR FORMULARIO
-// =========================
+// ========================================
+// NUEVA PRENDA
+// ========================================
 
 const btnNuevaPrenda =
     document.getElementById(
         "btn-nueva-prenda"
     );
 
+
 const formularioPrenda =
     document.getElementById(
         "formulario-prenda"
     );
 
+
 btnNuevaPrenda.addEventListener(
     "click",
     () => {
 
-        // Estamos creando una prenda nueva
         prendaEditandoId = null;
 
-        // Cambiar título
+
         document.querySelector(
             "#formulario-prenda h3"
-        ).textContent = "Nueva prenda";
+        ).textContent =
+            "Nueva prenda";
 
-        // Cambiar texto del botón
+
         btnGuardarPrenda.textContent =
             "Guardar prenda";
 
-        // Limpiar formulario
+
         limpiarFormulario();
 
-        // Mostrar formulario
+
         formularioPrenda.classList.toggle(
             "formulario-oculto"
         );
+
     }
 );
 
 
-// =========================
-// BOTÓN GUARDAR
-// =========================
+// ========================================
+// GUARDAR PRENDA
+// ========================================
 
 const btnGuardarPrenda =
     document.getElementById(
         "btn-guardar-prenda"
     );
+
 
 btnGuardarPrenda.addEventListener(
     "click",
@@ -176,25 +200,30 @@ btnGuardarPrenda.addEventListener(
                 "nombre"
             ).value;
 
+
         const categoria =
             document.getElementById(
                 "categoria"
             ).value;
+
 
         const color =
             document.getElementById(
                 "color"
             ).value;
 
+
         const marca =
             document.getElementById(
                 "marca"
             ).value;
 
+
         const inputImagen =
             document.getElementById(
                 "imagen"
             );
+
 
         const archivo =
             inputImagen.files[0];
@@ -205,20 +234,19 @@ btnGuardarPrenda.addEventListener(
             let nombreImagen = "";
 
 
-            // =========================
-            // SI ESTAMOS EDITANDO
-            // =========================
+            // ========================================
+            // EDITAR PRENDA
+            // ========================================
 
             if (prendaEditandoId !== null) {
 
-                // Primero mantenemos la imagen
-                // actual si no se selecciona otra
+                const respuestaPrendas =
+                    await fetch(API_URL);
+
 
                 const prendas =
-                    await fetch(API_URL)
-                        .then(respuesta =>
-                            respuesta.json()
-                        );
+                    await respuestaPrendas.json();
+
 
                 const prendaActual =
                     prendas.find(
@@ -227,13 +255,12 @@ btnGuardarPrenda.addEventListener(
                             prendaEditandoId
                     );
 
+
                 nombreImagen =
                     prendaActual.imagen;
 
 
-                // Si seleccionamos una imagen nueva
-                // la subimos
-
+                // Si se selecciona una nueva imagen
                 if (archivo) {
 
                     nombreImagen =
@@ -254,6 +281,7 @@ btnGuardarPrenda.addEventListener(
                     marca: marca,
 
                     imagen: nombreImagen
+
                 };
 
 
@@ -261,6 +289,7 @@ btnGuardarPrenda.addEventListener(
                     await fetch(
                         `${API_URL}/${prendaEditandoId}`,
                         {
+
                             method: "PUT",
 
                             headers: {
@@ -288,12 +317,13 @@ btnGuardarPrenda.addEventListener(
                     "Prenda actualizada correctamente"
                 );
 
+
             } else {
 
 
-                // =========================
-                // CREAR PRENDA NUEVA
-                // =========================
+                // ========================================
+                // CREAR PRENDA
+                // ========================================
 
                 if (archivo) {
 
@@ -315,6 +345,7 @@ btnGuardarPrenda.addEventListener(
                     marca: marca,
 
                     imagen: nombreImagen
+
                 };
 
 
@@ -322,6 +353,7 @@ btnGuardarPrenda.addEventListener(
                     await fetch(
                         API_URL,
                         {
+
                             method: "POST",
 
                             headers: {
@@ -348,26 +380,28 @@ btnGuardarPrenda.addEventListener(
                 console.log(
                     "Prenda guardada correctamente"
                 );
+
             }
 
 
-            // =========================
-            // LIMPIAR Y CERRAR
-            // =========================
+            // ========================================
+            // LIMPIAR
+            // ========================================
 
             limpiarFormulario();
 
+
             prendaEditandoId = null;
+
 
             formularioPrenda.classList.add(
                 "formulario-oculto"
             );
 
+
             btnGuardarPrenda.textContent =
                 "Guardar prenda";
 
-
-            // Actualizar prendas
 
             cargarPrendas();
 
@@ -379,18 +413,20 @@ btnGuardarPrenda.addEventListener(
                 error
             );
         }
+
     }
 );
 
 
-// =========================
+// ========================================
 // SUBIR IMAGEN
-// =========================
+// ========================================
 
 async function subirImagen(archivo) {
 
     const formularioImagen =
         new FormData();
+
 
     formularioImagen.append(
         "imagen",
@@ -398,7 +434,7 @@ async function subirImagen(archivo) {
     );
 
 
-    const respuestaImagen =
+    const respuesta =
         await fetch(
             API_URL + "/imagen",
             {
@@ -408,7 +444,7 @@ async function subirImagen(archivo) {
         );
 
 
-    if (!respuestaImagen.ok) {
+    if (!respuesta.ok) {
 
         throw new Error(
             "No se pudo subir la imagen"
@@ -416,13 +452,13 @@ async function subirImagen(archivo) {
     }
 
 
-    return await respuestaImagen.text();
+    return await respuesta.text();
 }
 
 
-// =========================
+// ========================================
 // EDITAR PRENDA
-// =========================
+// ========================================
 
 async function editarPrenda(id) {
 
@@ -431,8 +467,10 @@ async function editarPrenda(id) {
         const respuesta =
             await fetch(API_URL);
 
+
         const prendas =
             await respuesta.json();
+
 
         const prenda =
             prendas.find(
@@ -449,48 +487,47 @@ async function editarPrenda(id) {
         }
 
 
-        // Guardamos el ID
         prendaEditandoId = id;
 
 
-        // Rellenamos formulario
-
         document.getElementById(
             "nombre"
-        ).value = prenda.nombre || "";
+        ).value =
+            prenda.nombre || "";
+
 
         document.getElementById(
             "categoria"
-        ).value = prenda.categoria || "";
+        ).value =
+            prenda.categoria || "";
+
 
         document.getElementById(
             "color"
-        ).value = prenda.color || "";
+        ).value =
+            prenda.color || "";
+
 
         document.getElementById(
             "marca"
-        ).value = prenda.marca || "";
+        ).value =
+            prenda.marca || "";
 
-
-        // Cambiamos textos
 
         document.querySelector(
             "#formulario-prenda h3"
         ).textContent =
             "Editar prenda";
 
+
         btnGuardarPrenda.textContent =
             "Guardar cambios";
 
-
-        // Mostrar formulario
 
         formularioPrenda.classList.remove(
             "formulario-oculto"
         );
 
-
-        // Llevar al formulario
 
         formularioPrenda.scrollIntoView({
             behavior: "smooth"
@@ -507,9 +544,9 @@ async function editarPrenda(id) {
 }
 
 
-// =========================
+// ========================================
 // LIMPIAR FORMULARIO
-// =========================
+// ========================================
 
 function limpiarFormulario() {
 
@@ -517,17 +554,21 @@ function limpiarFormulario() {
         "nombre"
     ).value = "";
 
+
     document.getElementById(
         "categoria"
     ).value = "";
+
 
     document.getElementById(
         "color"
     ).value = "";
 
+
     document.getElementById(
         "marca"
     ).value = "";
+
 
     document.getElementById(
         "imagen"
@@ -535,9 +576,9 @@ function limpiarFormulario() {
 }
 
 
-// =========================
+// ========================================
 // ELIMINAR PRENDA
-// =========================
+// ========================================
 
 async function eliminarPrenda(id) {
 
@@ -590,8 +631,101 @@ async function eliminarPrenda(id) {
 }
 
 
-// =========================
+// ========================================
+// FILTRAR POR CATEGORÍA
+// ========================================
+
+const botonesCategoria =
+    document.querySelectorAll(
+        ".btn-categoria"
+    );
+
+
+botonesCategoria.forEach(
+    boton => {
+
+        boton.addEventListener(
+            "click",
+            async () => {
+
+                const categoria =
+                    boton.dataset.categoria;
+
+
+                // Quitar activo de todos
+
+                botonesCategoria.forEach(
+                    otroBoton => {
+
+                        otroBoton.classList.remove(
+                            "activa"
+                        );
+
+                    }
+                );
+
+
+                // Activar botón pulsado
+
+                boton.classList.add(
+                    "activa"
+                );
+
+
+                try {
+
+                    const respuesta =
+                        await fetch(API_URL);
+
+
+                    const prendas =
+                        await respuesta.json();
+
+
+                    if (
+                        categoria ===
+                        "Todas"
+                    ) {
+
+                        mostrarPrendas(
+                            prendas
+                        );
+
+                    } else {
+
+                        const prendasFiltradas =
+                            prendas.filter(
+                                prenda =>
+                                    prenda.categoria ===
+                                    categoria
+                            );
+
+
+                        mostrarPrendas(
+                            prendasFiltradas
+                        );
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Error al filtrar:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// ========================================
 // INICIAR APLICACIÓN
-// =========================
+// ========================================
 
 cargarPrendas();
