@@ -19,17 +19,21 @@
 
 </head>
 
+
 <body>
 
-    <!-- =========================
-         CABECERA
-    ========================== -->
+
+    <!-- ========================================= -->
+    <!-- CABECERA -->
+    <!-- ========================================= -->
 
     <header>
 
         <h1>My Wardrobe</h1>
 
-        <p>Mi armario digital</p>
+        <p>
+            Mi armario digital
+        </p>
 
     </header>
 
@@ -37,15 +41,17 @@
     <main>
 
 
-        <!-- =========================
-             CATEGORÍAS
-        ========================== -->
+        <!-- ========================================= -->
+        <!-- CATEGORÍAS -->
+        <!-- ========================================= -->
 
         <section class="categorias">
 
             <div class="categorias-container">
 
+
                 <button
+                    type="button"
                     class="btn-categoria activa"
                     data-categoria="Todas"
                 >
@@ -54,6 +60,7 @@
 
 
                 <button
+                    type="button"
                     id="btn-generar-outfit"
                     class="btn-generar-outfit"
                 >
@@ -62,6 +69,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Camisetas"
                 >
@@ -70,6 +78,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Camisas"
                 >
@@ -78,6 +87,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Pantalones"
                 >
@@ -86,6 +96,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Sudaderas"
                 >
@@ -94,6 +105,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Chaquetas"
                 >
@@ -102,6 +114,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Zapatos"
                 >
@@ -110,48 +123,61 @@
 
 
                 <button
+                    type="button"
                     class="btn-categoria"
                     data-categoria="Accesorios"
                 >
                     Accesorios
                 </button>
 
+
             </div>
 
         </section>
 
 
-        <!-- =========================
-             PRENDAS
-        ========================== -->
+
+        <!-- ========================================= -->
+        <!-- PRENDAS -->
+        <!-- ========================================= -->
 
         <section class="prendas">
 
 
             <div class="titulo-prendas">
 
-                <h2>Mis prendas</h2>
+
+                <h2>
+                    Mis prendas
+                </h2>
 
 
                 <button
+                    type="button"
                     id="btn-nueva-prenda"
                 >
                     + Añadir prenda
                 </button>
 
+
             </div>
 
 
-            <!-- =========================
-                 FORMULARIO
-            ========================== -->
+
+            <!-- ===================================== -->
+            <!-- FORMULARIO -->
+            <!-- ===================================== -->
 
             <div
                 id="formulario-prenda"
                 class="formulario-oculto"
             >
 
-                <h3>Nueva prenda</h3>
+
+                <h3>
+                    Nueva prenda
+                </h3>
+
 
 
                 <input
@@ -161,41 +187,52 @@
                 >
 
 
+
                 <select id="categoria">
+
 
                     <option value="">
                         Selecciona una categoría
                     </option>
 
+
                     <option value="Camisetas">
                         Camisetas
                     </option>
+
 
                     <option value="Camisas">
                         Camisas
                     </option>
 
+
                     <option value="Pantalones">
                         Pantalones
                     </option>
+
 
                     <option value="Sudaderas">
                         Sudaderas
                     </option>
 
+
                     <option value="Chaquetas">
                         Chaquetas
                     </option>
+
 
                     <option value="Zapatos">
                         Zapatos
                     </option>
 
+
                     <option value="Accesorios">
                         Accesorios
                     </option>
 
+
                 </select>
+
 
 
                 <input
@@ -205,11 +242,13 @@
                 >
 
 
+
                 <input
                     type="text"
                     id="marca"
                     placeholder="Marca"
                 >
+
 
 
                 <input
@@ -219,49 +258,62 @@
                 >
 
 
+
                 <button
+                    type="button"
                     id="btn-guardar-prenda"
                 >
                     Guardar prenda
                 </button>
 
+                <p id="estado-subida" class="estado-subida"></p>
+
+
             </div>
 
 
-            <!-- =========================
-                 LISTA DE PRENDAS
-            ========================== -->
 
-            <div id="lista-prendas">
+            <!-- ===================================== -->
+            <!-- LISTA DE PRENDAS -->
+            <!-- ===================================== -->
 
-                <!-- JavaScript colocará aquí las prendas -->
-
+            <div
+                id="lista-prendas"
+            >
             </div>
+
 
         </section>
+
 
     </main>
 
 
-    <!-- =========================
-         MODAL GENERAR OUTFIT
-    ========================== -->
+
+    <!-- ========================================= -->
+    <!-- MODAL GENERAR OUTFIT -->
+    <!-- ========================================= -->
 
     <div
         id="modal-outfit"
         class="modal-oculto"
     >
 
+
         <div class="modal-contenido">
+
 
             <h2>
                 ¿Para qué ocasión quieres vestir?
             </h2>
 
 
+
             <div class="ocasiones-container">
 
+
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Cena con amigos"
                 >
@@ -270,6 +322,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Trabajo"
                 >
@@ -278,6 +331,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Cita"
                 >
@@ -286,6 +340,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Fiesta"
                 >
@@ -294,6 +349,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Casual"
                 >
@@ -302,6 +358,7 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Playa"
                 >
@@ -310,32 +367,40 @@
 
 
                 <button
+                    type="button"
                     class="btn-ocasion"
                     data-ocasion="Deporte"
                 >
                     🏃 Deporte
                 </button>
 
+
             </div>
 
 
+
             <button
+                type="button"
                 id="btn-cerrar-modal"
                 class="btn-cerrar-modal"
             >
                 Cancelar
             </button>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
+
+    <!-- ========================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================================= -->
 
     <script src="js/app.js"></script>
+
 
 </body>
 

@@ -10,13 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/prendas")
@@ -29,27 +33,35 @@ public class PrendaController {
         this.prendaService = prendaService;
     }
 
-    // =========================
+
+    // ========================================
     // OBTENER TODAS LAS PRENDAS
-    // =========================
+    // ========================================
 
     @GetMapping
     public List<Prenda> obtenerTodas() {
+
         return prendaService.obtenerTodas();
+
     }
 
-    // =========================
+
+    // ========================================
     // CREAR PRENDA
-    // =========================
+    // ========================================
 
     @PostMapping
-    public Prenda crear(@RequestBody Prenda prenda) {
+    public Prenda crear(
+            @RequestBody Prenda prenda) {
+
         return prendaService.guardar(prenda);
+
     }
 
-    // =========================
+
+    // ========================================
     // EDITAR PRENDA
-    // =========================
+    // ========================================
 
     @PutMapping("/{id}")
     public Prenda editar(
@@ -59,20 +71,26 @@ public class PrendaController {
         prenda.setId(id);
 
         return prendaService.guardar(prenda);
+
     }
 
-    // =========================
+
+    // ========================================
     // ELIMINAR PRENDA
-    // =========================
+    // ========================================
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(
+            @PathVariable Long id) {
+
         prendaService.eliminar(id);
+
     }
 
-    // =========================
-    // SUBIR IMAGEN
-    // =========================
+
+    // ========================================
+    // SUBIR IMAGEN + ELIMINAR FONDO
+    // ========================================
 
     @PostMapping("/imagen")
     public String subirImagen(
@@ -85,11 +103,10 @@ public class PrendaController {
                             + imagen.getOriginalFilename()
             );
 
-            System.out.println(
-                    "Tamaño: "
-                            + imagen.getSize()
-                            + " bytes"
-            );
+
+            // --------------------------------
+            // CARPETA DE IMÁGENES
+            // --------------------------------
 
             Path carpeta = Paths.get(
                     "mywardrove",
@@ -98,34 +115,199 @@ public class PrendaController {
 
             Files.createDirectories(carpeta);
 
-            Path ruta = carpeta.resolve(
-                    imagen.getOriginalFilename()
-            );
+
+            // --------------------------------
+            // NOMBRE ÚNICO
+            // --------------------------------
+
+            String nombreOriginal =
+                    imagen.getOriginalFilename();
+
+            String extension = ".jpg";
+
+            if (nombreOriginal != null
+                    && nombreOriginal.contains(".")) {
+
+                extension =
+                        nombreOriginal.substring(
+                                nombreOriginal.lastIndexOf(".")
+                        );
+            }
+
+
+            String nombreBase =
+                    UUID.randomUUID().toString();
+
+
+            // --------------------------------
+            // IMAGEN ORIGINAL TEMPORAL
+            // --------------------------------
+
+            Path imagenOriginal =
+                    carpeta.resolve(
+                            nombreBase + extension
+                    );
+
 
             Files.copy(
                     imagen.getInputStream(),
-                    ruta,
+                    imagenOriginal,
                     StandardCopyOption.REPLACE_EXISTING
             );
 
+
             System.out.println(
-                    "Imagen guardada en: "
-                            + ruta.toAbsolutePath()
+                    "Imagen original guardada:"
             );
 
-            return imagen.getOriginalFilename();
+            System.out.println(
+                    imagenOriginal.toAbsolutePath()
+            );
 
-        } catch (IOException e) {
+
+            // --------------------------------
+            // IMAGEN FINAL PNG
+            // --------------------------------
+
+            Path imagenProcesada =
+                    carpeta.resolve(
+                            nombreBase + ".png"
+                    );
+
+
+            // --------------------------------
+            // PYTHON
+            // --------------------------------
+
+            String python =
+                    "C:\\Users\\victo\\Desktop\\DAM\\PROYECTOS\\App-Wardrove\\mywardrove\\.venv-image\\Scripts\\python.exe";
+
+
+            String script =
+                    "C:\\Users\\victo\\Desktop\\DAM\\PROYECTOS\\App-Wardrove\\mywardrove\\image_processor\\procesar_imagen.py";
+
+
+            // --------------------------------
+            // EJECUTAR PYTHON
+            // --------------------------------
+
+            ProcessBuilder proceso =
+                    new ProcessBuilder(
+                            python,
+                            script,
+                            imagenOriginal.toAbsolutePath().toString(),
+                            imagenProcesada.toAbsolutePath().toString()
+                    );
+
+
+            proceso.redirectErrorStream(true);
+
+
+            Process procesoEjecutado =
+                    proceso.start();
+
+
+            // --------------------------------
+            // LEER RESPUESTA DE PYTHON
+            // --------------------------------
+
+            BufferedReader lector =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    procesoEjecutado
+                                            .getInputStream()
+                            )
+                    );
+
+
+            String linea;
+
+
+            while ((linea = lector.readLine()) != null) {
+
+                System.out.println(
+                        "PYTHON: " + linea
+                );
+
+            }
+
+
+            // --------------------------------
+            // ESPERAR A QUE TERMINE
+            // --------------------------------
+
+            int codigo =
+                    procesoEjecutado.waitFor();
+
+
+            System.out.println(
+                    "Código Python: "
+                            + codigo
+            );
+
+
+            // --------------------------------
+            // COMPROBAR RESULTADO
+            // --------------------------------
+
+            if (codigo != 0) {
+
+                throw new RuntimeException(
+                        "Python terminó con código: "
+                                + codigo
+                );
+
+            }
+
+
+            if (!Files.exists(imagenProcesada)) {
+
+                throw new RuntimeException(
+                        "Python no creó la imagen procesada"
+                );
+
+            }
+
+
+            // --------------------------------
+            // BORRAR ORIGINAL
+            // --------------------------------
+
+            Files.deleteIfExists(
+                    imagenOriginal
+            );
+
+
+            System.out.println(
+                    "Imagen procesada correctamente:"
+            );
+
+            System.out.println(
+                    imagenProcesada.toAbsolutePath()
+            );
+
+
+            // --------------------------------
+            // DEVOLVER NOMBRE PNG
+            // --------------------------------
+
+            return nombreBase + ".png";
+
+
+        } catch (Exception e) {
 
             e.printStackTrace();
 
-            return "Error al guardar la imagen";
+            return "Error al procesar la imagen";
+
         }
+
     }
 
-    // =========================
-    // MOSTRAR IMAGEN
-    // =========================
+
+    // ========================================
+    // OBTENER IMAGEN
+    // ========================================
 
     @GetMapping("/imagen/{nombre}")
     public ResponseEntity<Resource> obtenerImagen(
@@ -139,18 +321,22 @@ public class PrendaController {
                     nombre
             );
 
+
             System.out.println(
                     "Buscando imagen en:"
             );
+
 
             System.out.println(
                     ruta.toAbsolutePath()
             );
 
+
             Resource recurso =
                     new UrlResource(
                             ruta.toUri()
                     );
+
 
             if (!recurso.exists()
                     || !recurso.isReadable()) {
@@ -159,21 +345,27 @@ public class PrendaController {
                         "La imagen no existe: "
                                 + ruta.toAbsolutePath()
                 );
+
             }
+
 
             String tipoContenido =
                     Files.probeContentType(ruta);
+
 
             if (tipoContenido == null) {
 
                 tipoContenido =
                         "application/octet-stream";
+
             }
+
 
             System.out.println(
                     "Tipo de contenido: "
                             + tipoContenido
             );
+
 
             return ResponseEntity.ok()
                     .header(
@@ -181,6 +373,7 @@ public class PrendaController {
                             tipoContenido
                     )
                     .body(recurso);
+
 
         } catch (Exception e) {
 
@@ -190,6 +383,9 @@ public class PrendaController {
                     "No se pudo cargar la imagen",
                     e
             );
+
         }
+
     }
+
 }

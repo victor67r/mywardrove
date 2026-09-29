@@ -68,15 +68,10 @@ h2 {
     border: 1px solid #ddd;
     background-color: white;
     color: #333;
-
     padding: 12px 18px;
-
     border-radius: 25px;
-
     cursor: pointer;
-
     font-size: 14px;
-
     transition: all 0.2s ease;
 }
 
@@ -96,32 +91,21 @@ h2 {
 ========================= */
 
 .btn-generar-outfit {
-
     border: none;
-
     background: linear-gradient(
         135deg,
         #111,
         #3a3a3a
     );
-
     color: white;
-
     padding: 12px 20px;
-
     border-radius: 25px;
-
     cursor: pointer;
-
     font-size: 14px;
-
     font-weight: 600;
-
     letter-spacing: 0.2px;
-
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15);
-
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
@@ -129,12 +113,9 @@ h2 {
 }
 
 .btn-generar-outfit:hover {
-
     transform: translateY(-2px);
-
     box-shadow:
         0 7px 18px rgba(0, 0, 0, 0.22);
-
     background: linear-gradient(
         135deg,
         #222,
@@ -143,9 +124,7 @@ h2 {
 }
 
 .btn-generar-outfit:active {
-
     transform: translateY(0);
-
     box-shadow:
         0 3px 8px rgba(0, 0, 0, 0.15);
 }
@@ -159,7 +138,6 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     margin-bottom: 25px;
 }
 
@@ -170,18 +148,12 @@ h2 {
 
 #btn-nueva-prenda {
     border: none;
-
     background-color: #111;
     color: white;
-
     padding: 13px 20px;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     font-size: 14px;
-
     transition: 0.2s;
 }
 
@@ -200,13 +172,9 @@ h2 {
 
 #formulario-prenda {
     background-color: white;
-
     padding: 28px;
-
     border-radius: 15px;
-
     margin-bottom: 35px;
-
     box-shadow:
         0 4px 15px rgba(0, 0, 0, 0.07);
 }
@@ -218,19 +186,12 @@ h2 {
 
 #formulario-prenda input,
 #formulario-prenda select {
-
     width: 100%;
-
     padding: 13px;
-
     margin-bottom: 13px;
-
     border: 1px solid #ddd;
-
     border-radius: 8px;
-
     font-size: 15px;
-
     outline: none;
 }
 
@@ -245,28 +206,37 @@ h2 {
 ========================= */
 
 #btn-guardar-prenda {
-
     border: none;
-
     background-color: #111;
-
     color: white;
-
     padding: 13px 22px;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     font-size: 15px;
-
     margin-top: 5px;
-
     transition: 0.2s;
 }
 
 #btn-guardar-prenda:hover {
     background-color: #333;
+}
+
+#btn-guardar-prenda:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   ESTADO DE SUBIDA
+========================= */
+
+.estado-subida {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    color: #555;
 }
 
 
@@ -275,15 +245,12 @@ h2 {
 ========================= */
 
 #lista-prendas {
-
     display: grid;
-
     grid-template-columns:
         repeat(
             auto-fill,
             minmax(230px, 1fr)
         );
-
     gap: 25px;
 }
 
@@ -293,25 +260,18 @@ h2 {
 ========================= */
 
 .tarjeta-prenda {
-
     background-color: white;
-
     border-radius: 16px;
-
     overflow: hidden;
-
     box-shadow:
         0 4px 15px rgba(0, 0, 0, 0.08);
-
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease;
 }
 
 .tarjeta-prenda:hover {
-
     transform: translateY(-5px);
-
     box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.12);
 }
@@ -322,28 +282,18 @@ h2 {
 ========================= */
 
 .imagen-prenda {
-
     height: 280px;
-
     background-color: #eee;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     overflow: hidden;
 }
 
 .imagen-prenda img {
-
     width: 100%;
-
     height: 100%;
-
     object-fit: cover;
-
     display: block;
 }
 
@@ -353,23 +303,17 @@ h2 {
 ========================= */
 
 .informacion-prenda {
-
     padding: 20px;
 }
 
 .informacion-prenda h3 {
-
     font-size: 19px;
-
     margin-bottom: 7px;
 }
 
 .informacion-prenda p {
-
     color: #666;
-
     margin-bottom: 9px;
-
     font-size: 14px;
 }
 
@@ -379,19 +323,12 @@ h2 {
 ========================= */
 
 .categoria {
-
     display: inline-block;
-
     background-color: #111;
-
     color: white;
-
     padding: 5px 10px;
-
     border-radius: 20px;
-
     font-size: 11px;
-
     margin-top: 3px;
 }
 
@@ -401,7 +338,6 @@ h2 {
 ========================= */
 
 .color {
-
     margin-top: 12px;
 }
 
@@ -411,52 +347,47 @@ h2 {
 ========================= */
 
 .botones-prenda {
-
     display: flex;
-
     gap: 8px;
-
     margin-top: 16px;
 }
 
 .btn-editar,
 .btn-eliminar {
-
     flex: 1;
-
     padding: 10px;
-
     border: none;
-
     border-radius: 8px;
-
     color: white;
-
     cursor: pointer;
-
     font-size: 13px;
-
     transition: 0.2s;
 }
 
 .btn-editar {
-
     background-color: #3498db;
 }
 
 .btn-editar:hover {
-
     background-color: #2980b9;
 }
 
 .btn-eliminar {
-
     background-color: #e74c3c;
 }
 
 .btn-eliminar:hover {
-
     background-color: #c0392b;
+}
+
+
+/* =========================
+   SIN IMAGEN
+========================= */
+
+.sin-imagen {
+    color: #777;
+    font-size: 14px;
 }
 
 
@@ -468,25 +399,16 @@ h2 {
     display: none;
 }
 
-
 #modal-outfit {
-
     position: fixed;
-
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
     background-color: rgba(0, 0, 0, 0.55);
-
     align-items: center;
-
     justify-content: center;
-
     z-index: 1000;
-
     padding: 20px;
 }
 
@@ -506,28 +428,18 @@ h2 {
 
 
 .modal-contenido {
-
     background-color: white;
-
     width: 100%;
-
     max-width: 500px;
-
     padding: 35px;
-
     border-radius: 20px;
-
     box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.25);
-
     text-align: center;
 }
 
-
 .modal-contenido h2 {
-
     font-size: 23px;
-
     margin-bottom: 25px;
 }
 
@@ -537,45 +449,28 @@ h2 {
 ========================= */
 
 .ocasiones-container {
-
     display: grid;
-
     grid-template-columns:
         repeat(2, 1fr);
-
     gap: 12px;
 }
 
-
 .btn-ocasion {
-
     border: 1px solid #ddd;
-
     background-color: #f8f8f8;
-
     color: #333;
-
     padding: 15px 10px;
-
     border-radius: 12px;
-
     cursor: pointer;
-
     font-size: 14px;
-
     transition:
         all 0.2s ease;
 }
 
-
 .btn-ocasion:hover {
-
     background-color: #111;
-
     color: white;
-
     border-color: #111;
-
     transform: translateY(-2px);
 }
 
@@ -585,25 +480,16 @@ h2 {
 ========================= */
 
 .btn-cerrar-modal {
-
     margin-top: 25px;
-
     border: none;
-
     background: none;
-
     color: #666;
-
     cursor: pointer;
-
     font-size: 14px;
-
     padding: 8px 15px;
 }
 
-
 .btn-cerrar-modal:hover {
-
     color: #111;
 }
 
@@ -633,10 +519,8 @@ h2 {
     }
 
     #lista-prendas {
-
         grid-template-columns:
             repeat(2, 1fr);
-
         gap: 12px;
     }
 
@@ -655,7 +539,6 @@ h2 {
     .botones-prenda {
         flex-direction: column;
     }
-
 }
 
 
@@ -666,13 +549,10 @@ h2 {
 @media (max-width: 500px) {
 
     .modal-contenido {
-
         padding: 25px 20px;
     }
 
     .ocasiones-container {
-
         grid-template-columns: 1fr;
     }
-
 }
