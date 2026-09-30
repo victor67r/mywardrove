@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>My Wardrobe</title>
+    <title>My Wardrove</title>
 
     <link
         rel="stylesheet"
@@ -23,113 +23,91 @@
 <body>
 
 
-    <!-- ========================================= -->
-    <!-- CABECERA -->
-    <!-- ========================================= -->
+    <!-- =====================================================
+         CABECERA
+    ====================================================== -->
 
-    <header>
+    <header class="header">
 
-        <h1>My Wardrobe</h1>
+        <div class="header-inner">
 
-        <p>
-            Mi armario digital
-        </p>
+            <div class="logo">
+
+                <span class="logo-icon">
+                    ✦
+                </span>
+
+                <div>
+
+                    <h1>
+                        My Wardrove
+                    </h1>
+
+                    <p>
+                        Tu armario digital
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btn-generar-outfit"
+                class="btn-outfit-header"
+            >
+                ✨ Generar outfit
+            </button>
+
+        </div>
 
     </header>
 
 
+
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+    ====================================================== -->
+
     <main>
 
 
-        <!-- ========================================= -->
-        <!-- CATEGORÍAS -->
-        <!-- ========================================= -->
+        <!-- =================================================
+             PRESENTACIÓN
+        ================================================== -->
 
-        <section class="categorias">
+        <section class="hero">
 
-            <div class="categorias-container">
+            <div class="hero-text">
 
+                <span class="hero-label">
+                    MI ARMARIO
+                </span>
 
-                <button
-                    type="button"
-                    class="btn-categoria activa"
-                    data-categoria="Todas"
-                >
-                    👕 Todas
-                </button>
+                <h2>
+                    Todo lo que tienes,<br>
+                    <span>en un solo lugar.</span>
+                </h2>
 
+                <p>
+                    Organiza tus prendas, crea combinaciones
+                    y descubre nuevas formas de vestir.
+                </p>
 
-                <button
-                    type="button"
-                    id="btn-generar-outfit"
-                    class="btn-generar-outfit"
-                >
-                    ✨ Generar outfit
-                </button>
+            </div>
 
 
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Camisetas"
-                >
-                    Camisetas
-                </button>
-
+            <div class="hero-actions">
 
                 <button
                     type="button"
-                    class="btn-categoria"
-                    data-categoria="Camisas"
+                    id="btn-nueva-prenda"
+                    class="btn-nueva-prenda"
                 >
-                    Camisas
+                    <span>＋</span>
+                    Añadir prenda
                 </button>
-
-
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Pantalones"
-                >
-                    Pantalones
-                </button>
-
-
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Sudaderas"
-                >
-                    Sudaderas
-                </button>
-
-
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Chaquetas"
-                >
-                    Chaquetas
-                </button>
-
-
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Zapatos"
-                >
-                    Zapatos
-                </button>
-
-
-                <button
-                    type="button"
-                    class="btn-categoria"
-                    data-categoria="Accesorios"
-                >
-                    Accesorios
-                </button>
-
 
             </div>
 
@@ -137,151 +115,301 @@
 
 
 
-        <!-- ========================================= -->
-        <!-- PRENDAS -->
-        <!-- ========================================= -->
+        <!-- =================================================
+             CATEGORÍAS
+        ================================================== -->
+
+        <section class="categorias">
+
+            <div class="seccion-header">
+
+                <div>
+
+                    <span class="seccion-label">
+                        EXPLORAR
+                    </span>
+
+                    <h2>
+                        Mi armario
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="categorias-scroll">
+
+                <div class="categorias-container">
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria activa"
+                        data-categoria="Todas"
+                    >
+                        <span>✦</span>
+                        Todas
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Camisetas"
+                    >
+                        Camisetas
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Camisas"
+                    >
+                        Camisas
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Pantalones"
+                    >
+                        Pantalones
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Sudaderas"
+                    >
+                        Sudaderas
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Chaquetas"
+                    >
+                        Chaquetas
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Zapatos"
+                    >
+                        Zapatos
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-categoria"
+                        data-categoria="Accesorios"
+                    >
+                        Accesorios
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRENDAS
+        ================================================== -->
 
         <section class="prendas">
 
-
             <div class="titulo-prendas">
 
+                <div>
 
-                <h2>
-                    Mis prendas
-                </h2>
+                    <span class="seccion-label">
+                        COLECCIÓN
+                    </span>
 
+                    <h2>
+                        Mis prendas
+                    </h2>
 
-                <button
-                    type="button"
-                    id="btn-nueva-prenda"
-                >
-                    + Añadir prenda
-                </button>
-
+                </div>
 
             </div>
 
 
 
-            <!-- ===================================== -->
-            <!-- FORMULARIO -->
-            <!-- ===================================== -->
+            <!-- =================================================
+                 FORMULARIO
+            ================================================== -->
 
             <div
                 id="formulario-prenda"
                 class="formulario-oculto"
             >
 
+                <div class="formulario-header">
 
-                <h3>
-                    Nueva prenda
-                </h3>
+                    <div>
 
+                        <span class="seccion-label">
+                            ARMARIO
+                        </span>
 
+                        <h3>
+                            Nueva prenda
+                        </h3>
 
-                <input
-                    type="text"
-                    id="nombre"
-                    placeholder="Nombre de la prenda"
-                >
+                    </div>
 
-
-
-                <select id="categoria">
-
-
-                    <option value="">
-                        Selecciona una categoría
-                    </option>
+                </div>
 
 
-                    <option value="Camisetas">
-                        Camisetas
-                    </option>
+                <div class="formulario-grid">
 
 
-                    <option value="Camisas">
-                        Camisas
-                    </option>
+                    <div class="campo">
+
+                        <label for="nombre">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombre"
+                            placeholder="Ej. Camiseta blanca"
+                        >
+
+                    </div>
 
 
-                    <option value="Pantalones">
-                        Pantalones
-                    </option>
+                    <div class="campo">
+
+                        <label for="categoria">
+                            Categoría
+                        </label>
+
+                        <select id="categoria">
+
+                            <option value="">
+                                Selecciona una categoría
+                            </option>
+
+                            <option value="Camisetas">
+                                Camisetas
+                            </option>
+
+                            <option value="Camisas">
+                                Camisas
+                            </option>
+
+                            <option value="Pantalones">
+                                Pantalones
+                            </option>
+
+                            <option value="Sudaderas">
+                                Sudaderas
+                            </option>
+
+                            <option value="Chaquetas">
+                                Chaquetas
+                            </option>
+
+                            <option value="Zapatos">
+                                Zapatos
+                            </option>
+
+                            <option value="Accesorios">
+                                Accesorios
+                            </option>
+
+                        </select>
+
+                    </div>
 
 
-                    <option value="Sudaderas">
-                        Sudaderas
-                    </option>
+                    <div class="campo">
+
+                        <label for="color">
+                            Color
+                        </label>
+
+                        <input
+                            type="text"
+                            id="color"
+                            placeholder="Ej. Blanco"
+                        >
+
+                    </div>
 
 
-                    <option value="Chaquetas">
-                        Chaquetas
-                    </option>
+                    <div class="campo">
+
+                        <label for="marca">
+                            Marca
+                        </label>
+
+                        <input
+                            type="text"
+                            id="marca"
+                            placeholder="Ej. Zara"
+                        >
+
+                    </div>
 
 
-                    <option value="Zapatos">
-                        Zapatos
-                    </option>
+                    <div class="campo campo-imagen">
+
+                        <label for="imagen">
+                            Fotografía
+                        </label>
+
+                        <input
+                            type="file"
+                            id="imagen"
+                            accept="image/*"
+                        >
+
+                    </div>
 
 
-                    <option value="Accesorios">
-                        Accesorios
-                    </option>
+                </div>
 
 
-                </select>
+                <div class="formulario-footer">
+
+                    <button
+                        type="button"
+                        id="btn-guardar-prenda"
+                    >
+                        Guardar prenda
+                    </button>
 
 
+                    <p
+                        id="estado-subida"
+                        class="estado-subida"
+                    ></p>
 
-                <input
-                    type="text"
-                    id="color"
-                    placeholder="Color"
-                >
-
-
-
-                <input
-                    type="text"
-                    id="marca"
-                    placeholder="Marca"
-                >
-
-
-
-                <input
-                    type="file"
-                    id="imagen"
-                    accept="image/*"
-                >
-
-
-
-                <button
-                    type="button"
-                    id="btn-guardar-prenda"
-                >
-                    Guardar prenda
-                </button>
-
-                <p id="estado-subida" class="estado-subida"></p>
-
+                </div>
 
             </div>
 
 
 
-            <!-- ===================================== -->
-            <!-- LISTA DE PRENDAS -->
-            <!-- ===================================== -->
+            <!-- =================================================
+                 LISTA DE PRENDAS
+            ================================================== -->
 
-            <div
-                id="lista-prendas"
-            >
-            </div>
-
+            <div id="lista-prendas"></div>
 
         </section>
 
@@ -290,23 +418,45 @@
 
 
 
-    <!-- ========================================= -->
-    <!-- MODAL GENERAR OUTFIT -->
-    <!-- ========================================= -->
+    <!-- =====================================================
+         MODAL GENERAR OUTFIT
+    ====================================================== -->
 
     <div
         id="modal-outfit"
         class="modal-oculto"
     >
 
-
         <div class="modal-contenido">
+
+            <button
+                type="button"
+                id="btn-cerrar-modal"
+                class="modal-cerrar"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-icon">
+                ✨
+            </div>
+
+
+            <span class="seccion-label">
+                GENERADOR
+            </span>
 
 
             <h2>
-                ¿Para qué ocasión quieres vestir?
+                ¿Qué te vas a poner?
             </h2>
 
+
+            <p class="modal-descripcion">
+                Elige una ocasión y crea un outfit
+                con las prendas de tu armario.
+            </p>
 
 
             <div class="ocasiones-container">
@@ -317,7 +467,9 @@
                     class="btn-ocasion"
                     data-ocasion="Cena con amigos"
                 >
-                    🍽️ Cena con amigos
+                    <span>🍽️</span>
+                    <strong>Cena</strong>
+                    <small>con amigos</small>
                 </button>
 
 
@@ -326,7 +478,9 @@
                     class="btn-ocasion"
                     data-ocasion="Trabajo"
                 >
-                    💼 Trabajo
+                    <span>💼</span>
+                    <strong>Trabajo</strong>
+                    <small>profesional</small>
                 </button>
 
 
@@ -335,7 +489,9 @@
                     class="btn-ocasion"
                     data-ocasion="Cita"
                 >
-                    ❤️ Cita
+                    <span>❤️</span>
+                    <strong>Cita</strong>
+                    <small>especial</small>
                 </button>
 
 
@@ -344,7 +500,9 @@
                     class="btn-ocasion"
                     data-ocasion="Fiesta"
                 >
-                    🎉 Fiesta
+                    <span>🎉</span>
+                    <strong>Fiesta</strong>
+                    <small>salir de noche</small>
                 </button>
 
 
@@ -353,7 +511,9 @@
                     class="btn-ocasion"
                     data-ocasion="Casual"
                 >
-                    ☀️ Casual
+                    <span>☀️</span>
+                    <strong>Casual</strong>
+                    <small>día a día</small>
                 </button>
 
 
@@ -362,7 +522,9 @@
                     class="btn-ocasion"
                     data-ocasion="Playa"
                 >
-                    🏖️ Playa
+                    <span>🏖️</span>
+                    <strong>Playa</strong>
+                    <small>relajado</small>
                 </button>
 
 
@@ -371,35 +533,28 @@
                     class="btn-ocasion"
                     data-ocasion="Deporte"
                 >
-                    🏃 Deporte
+                    <span>🏃</span>
+                    <strong>Deporte</strong>
+                    <small>activo</small>
                 </button>
 
 
             </div>
 
-
-
-            <button
-                type="button"
-                id="btn-cerrar-modal"
-                class="btn-cerrar-modal"
-            >
-                Cancelar
-            </button>
-
-
         </div>
-
 
     </div>
 
 
 
-    <!-- ========================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ========================================= -->
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
-    <script src="js/app.js"></script>
+    <script
+        src="js/app.js"
+        defer
+    ></script>
 
 
 </body>

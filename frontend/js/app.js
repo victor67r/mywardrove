@@ -1147,4 +1147,6 @@ botonesOcasion.forEach(
 // CARGAR PRENDAS AL INICIAR
 // =====================================================
 
+document.addEventListener("DOMContentLoaded", () => {
 cargarPrendas();
+});
