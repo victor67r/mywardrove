@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Avatar 3D - My Wardrove</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f3f1ed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type="module">
+
+        // ==========================================
+        // IMPORTAR THREE.JS
+        // ==========================================
+
+        import * as THREE from
+            "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+        import { GLTFLoader } from
+            "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js/+esm";
+
+        import { OrbitControls } from
+            "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js/+esm";
+
+
+        // ==========================================
+        // ESCENA
+        // ==========================================
+
+        const escena = new THREE.Scene();
+
+        escena.background =
+            new THREE.Color(0xf3f1ed);
+
+
+        // ==========================================
+        // CÁMARA
+        // ==========================================
+
+        const camara =
+            new THREE.PerspectiveCamera(
+                45,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+
+        camara.position.set(
+            0,
+            1.5,
+            4
+        );
+
+
+        // ==========================================
+        // RENDERIZADOR
+        // ==========================================
+
+        const renderizador =
+            new THREE.WebGLRenderer({
+                antialias: true
+            });
+
+        renderizador.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        renderizador.setPixelRatio(
+            window.devicePixelRatio
+        );
+
+        document.body.appendChild(
+            renderizador.domElement
+        );
+
+
+        // ==========================================
+        // CONTROLES
+        // ==========================================
+
+        const controles =
+            new OrbitControls(
+                camara,
+                renderizador.domElement
+            );
+
+        controles.enableDamping = true;
+
+        controles.dampingFactor = 0.05;
+
+        controles.target.set(
+            0,
+            1,
+            0
+        );
+
+
+        // ==========================================
+        // LUZ PRINCIPAL
+        // ==========================================
+
+        const luzPrincipal =
+            new THREE.DirectionalLight(
+                0xffffff,
+                3
+            );
+
+        luzPrincipal.position.set(
+            3,
+            5,
+            4
+        );
+
+        escena.add(luzPrincipal);
+
+
+        // ==========================================
+        // LUZ AMBIENTE
+        // ==========================================
+
+        const luzSuave =
+            new THREE.AmbientLight(
+                0xffffff,
+                1
+            );
+
+        escena.add(luzSuave);
+
+
+        // ==========================================
+        // CARGAR AVATAR
+        // ==========================================
+
+        const loader =
+            new GLTFLoader();
+
+        loader.load(
+
+            "models/cyborg.glb",
+
+            function (gltf) {
+
+                const avatar =
+                    gltf.scene;
+
+                escena.add(avatar);
+
+                console.log(
+                    "✅ Avatar cargado correctamente"
+                );
+
+            },
+
+            function (progreso) {
+
+                if (progreso.total > 0) {
+
+                    const porcentaje =
+                        (progreso.loaded /
+                            progreso.total) * 100;
+
+                    console.log(
+                        "Cargando avatar:",
+                        porcentaje.toFixed(0) + "%"
+                    );
+                }
+
+            },
+
+            function (error) {
+
+                console.error(
+                    "❌ Error cargando el avatar:",
+                    error
+                );
+
+            }
+        );
+
+
+        // ==========================================
+        // ANIMACIÓN
+        // ==========================================
+
+        function animar() {
+
+            requestAnimationFrame(
+                animar
+            );
+
+            controles.update();
+
+            renderizador.render(
+                escena,
+                camara
+            );
+        }
+
+        animar();
+
+
+        // ==========================================
+        // REDIMENSIONAR
+        // ==========================================
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                camara.aspect =
+                    window.innerWidth /
+                    window.innerHeight;
+
+                camara.updateProjectionMatrix();
+
+                renderizador.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
