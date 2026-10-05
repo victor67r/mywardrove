@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>My Wardrove - Avatar 3D</title>
+    <title>MyWardrove - Avatar 3D</title>
 
     <style>
-        html, body {
+        body {
             margin: 0;
-            width: 100%;
-            height: 100%;
             overflow: hidden;
-            font-family: Arial, sans-serif;
             background: #f5f5f5;
         }
 
@@ -34,36 +32,43 @@ import { OrbitControls } from
     "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js/+esm";
 
 
-// ========================================
+// =====================================================
 // ESCENA
-// ========================================
+// =====================================================
 
 const escena = new THREE.Scene();
 
-escena.background = new THREE.Color(0xf5f5f5);
+escena.background =
+    new THREE.Color(0xf5f5f5);
 
 
-// ========================================
+// =====================================================
 // CÁMARA
-// ========================================
+// =====================================================
 
-const camara = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
+const camara =
+    new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        100
+    );
+
+camara.position.set(
+    0,
+    1.1,
+    3
 );
 
-camara.position.set(0, 1.1, 3);
 
-
-// ========================================
+// =====================================================
 // RENDERER
-// ========================================
+// =====================================================
 
-const renderer = new THREE.WebGLRenderer({
-    antialias: true
-});
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
 
 renderer.setSize(
     window.innerWidth,
@@ -74,22 +79,19 @@ renderer.setPixelRatio(
     window.devicePixelRatio
 );
 
-renderer.outputColorSpace =
-    THREE.SRGBColorSpace;
-
 document.body.appendChild(
     renderer.domElement
 );
 
 
-// ========================================
+// =====================================================
 // LUCES
-// ========================================
+// =====================================================
 
 const luzAmbiente =
     new THREE.HemisphereLight(
         0xffffff,
-        0x888888,
+        0x444444,
         2
     );
 
@@ -105,15 +107,15 @@ const luzDireccional =
 luzDireccional.position.set(
     2,
     3,
-    4
+    3
 );
 
 escena.add(luzDireccional);
 
 
-// ========================================
+// =====================================================
 // CONTROLES
-// ========================================
+// =====================================================
 
 const controles =
     new OrbitControls(
@@ -132,138 +134,107 @@ controles.enableDamping = true;
 controles.dampingFactor = 0.05;
 
 
-// ========================================
-// CARGAR TEXTURA
-// ========================================
+// =====================================================
+// GRUPO DE LA CAMISETA
+// =====================================================
+
+const grupoCamiseta =
+    new THREE.Group();
+
+
+// =====================================================
+// TEXTURA
+// =====================================================
 
 const textureLoader =
     new THREE.TextureLoader();
 
 const texturaCamiseta =
     textureLoader.load(
-        "texturas/IMG_9106.jpg",
+
+        "texturas/IMG_9106.png",
 
         function() {
+
             console.log(
                 "Imagen de la camiseta cargada correctamente"
             );
+
         },
 
         undefined,
 
         function(error) {
+
             console.error(
-                "Error cargando IMG_9106.jpg:",
+                "Error cargando IMG_9106.png:",
                 error
             );
+
         }
     );
 
-texturaCamiseta.colorSpace =
-    THREE.SRGBColorSpace;
 
-texturaCamiseta.wrapS =
-    THREE.ClampToEdgeWrapping;
-
-texturaCamiseta.wrapT =
-    THREE.ClampToEdgeWrapping;
-
-
-// ========================================
+// =====================================================
 // CREAR CAMISETA
-// ========================================
+// =====================================================
 
 function crearCamiseta(
     anchuraTorso,
     alturaTorso,
     profundidadTorso,
-    posicionX,
-    posicionY,
-    posicionZ
+    centroTorso
 ) {
 
-    const grupoCamiseta =
-        new THREE.Group();
+    // -------------------------------------------------
+    // CUERPO
+    // -------------------------------------------------
 
-
-    // ====================================
-    // CUERPO DE LA CAMISETA
-    // ====================================
-
-    const formaCuerpo =
+    const forma =
         new THREE.Shape();
 
-    formaCuerpo.moveTo(
-        -0.15,
-        -0.32
+    forma.moveTo(
+        -0.25,
+        -0.35
     );
 
-    formaCuerpo.lineTo(
-        0.15,
-        -0.32
+    forma.lineTo(
+        0.25,
+        -0.35
     );
 
-    formaCuerpo.lineTo(
-        0.16,
-        0.18
+    forma.lineTo(
+        0.25,
+        0.35
     );
 
-    formaCuerpo.lineTo(
-        0.17,
-        0.23
+    forma.lineTo(
+        -0.25,
+        0.35
     );
 
-    formaCuerpo.lineTo(
-        0.12,
-        0.27
+    forma.lineTo(
+        -0.25,
+        -0.35
     );
-
-    formaCuerpo.lineTo(
-        0.07,
-        0.21
-    );
-
-    formaCuerpo.lineTo(
-        -0.07,
-        0.21
-    );
-
-    formaCuerpo.lineTo(
-        -0.12,
-        0.27
-    );
-
-    formaCuerpo.lineTo(
-        -0.17,
-        0.23
-    );
-
-    formaCuerpo.lineTo(
-        -0.16,
-        0.18
-    );
-
-    formaCuerpo.closePath();
 
 
     const geometriaCuerpo =
         new THREE.ExtrudeGeometry(
-            formaCuerpo,
+            forma,
             {
-                depth: 0.20,
-                bevelEnabled: true,
-                bevelSegments: 2,
-                bevelSize: 0.01,
-                bevelThickness: 0.01
+                depth: 0.30,
+                bevelEnabled: false
             }
         );
+
 
     geometriaCuerpo.center();
 
 
-    // ====================================
+    // -------------------------------------------------
     // CURVATURA
-    // ====================================
+    // -------------------------------------------------
 
     const posicionVertices =
         geometriaCuerpo.attributes.position;
@@ -294,26 +265,22 @@ function crearCamiseta(
     geometriaCuerpo.computeVertexNormals();
 
 
-    // ====================================
-    // MATERIAL
-    // ====================================
+    // -------------------------------------------------
+    // MATERIAL DEL CUERPO
+    // -------------------------------------------------
 
-    const materialCamiseta =
+    const materialCuerpo =
         new THREE.MeshStandardMaterial({
-            map: texturaCamiseta,
+            color: 0xffffff,
             roughness: 0.8,
             metalness: 0
         });
 
 
-    // ====================================
-    // CUERPO
-    // ====================================
-
     const cuerpo =
         new THREE.Mesh(
             geometriaCuerpo,
-            materialCamiseta
+            materialCuerpo
         );
 
     grupoCamiseta.add(
@@ -321,9 +288,115 @@ function crearCamiseta(
     );
 
 
-    // ====================================
+    // -------------------------------------------------
+    // MEDIDAS
+    // -------------------------------------------------
+
+    const tamañoCamiseta =
+        new THREE.Vector3();
+
+    geometriaCuerpo.computeBoundingBox();
+
+    geometriaCuerpo.boundingBox.getSize(
+        tamañoCamiseta
+    );
+
+
+    // -------------------------------------------------
+    // ESCALAS QUE YA HABÍAMOS AJUSTADO
+    // -------------------------------------------------
+
+    const escalaX =
+        (anchuraTorso * 0.55) /
+        tamañoCamiseta.x;
+
+    const escalaY =
+        (alturaTorso * 0.90) /
+        tamañoCamiseta.y;
+
+    const escalaZ =
+        (profundidadTorso * 0.60) /
+        tamañoCamiseta.z;
+
+
+    grupoCamiseta.scale.set(
+        escalaX,
+        escalaY,
+        escalaZ
+    );
+
+
+    // -------------------------------------------------
+    // POSICIÓN QUE YA FUNCIONABA
+    // -------------------------------------------------
+
+    const posicionX =
+        centroTorso.x;
+
+    const posicionY =
+        centroTorso.y;
+
+    const posicionZ =
+        centroTorso.z;
+
+
+    grupoCamiseta.position.set(
+        posicionX,
+        posicionY,
+        posicionZ + 0.02
+    );
+
+
+    // -------------------------------------------------
+    // FOTO EN EL FRONTAL
+    // -------------------------------------------------
+
+    const geometriaFrontal =
+        new THREE.PlaneGeometry(
+            0.47,
+            0.58
+        );
+
+
+    // MeshBasicMaterial:
+    // la fotografía no depende de las luces
+
+    const materialFrontal =
+        new THREE.MeshBasicMaterial({
+
+            map: texturaCamiseta,
+
+            transparent: true,
+
+            side: THREE.DoubleSide
+
+        });
+
+
+    const frontal =
+        new THREE.Mesh(
+            geometriaFrontal,
+            materialFrontal
+        );
+
+
+    // Un poco por delante del cuerpo
+
+    frontal.position.set(
+        0,
+        0,
+        0.155
+    );
+
+
+    grupoCamiseta.add(
+        frontal
+    );
+
+
+    // -------------------------------------------------
     // MANGAS
-    // ====================================
+    // -------------------------------------------------
 
     const geometriaManga =
         new THREE.BoxGeometry(
@@ -333,13 +406,19 @@ function crearCamiseta(
         );
 
 
-    // MANGA IZQUIERDA
+    const materialManga =
+        new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.8
+        });
+
 
     const mangaIzquierda =
         new THREE.Mesh(
             geometriaManga,
-            materialCamiseta
+            materialManga
         );
+
 
     mangaIzquierda.position.set(
         -0.175,
@@ -350,18 +429,18 @@ function crearCamiseta(
     mangaIzquierda.rotation.z =
         -0.10;
 
+
     grupoCamiseta.add(
         mangaIzquierda
     );
 
 
-    // MANGA DERECHA
-
     const mangaDerecha =
         new THREE.Mesh(
-            geometriaManga,
-            materialCamiseta
+            geometriaManga.clone(),
+            materialManga
         );
+
 
     mangaDerecha.position.set(
         0.175,
@@ -372,14 +451,15 @@ function crearCamiseta(
     mangaDerecha.rotation.z =
         0.10;
 
+
     grupoCamiseta.add(
         mangaDerecha
     );
 
 
-    // ====================================
+    // -------------------------------------------------
     // CUELLO
-    // ====================================
+    // -------------------------------------------------
 
     const geometriaCuello =
         new THREE.TorusGeometry(
@@ -403,8 +483,10 @@ function crearCamiseta(
             materialCuello
         );
 
+
     cuello.rotation.x =
         Math.PI / 2;
+
 
     cuello.position.set(
         0,
@@ -412,81 +494,16 @@ function crearCamiseta(
         0.105
     );
 
+
     grupoCamiseta.add(
         cuello
-    );
-
-
-    // ====================================
-    // MEDIDAS
-    // ====================================
-
-    const tamañoCamiseta =
-        new THREE.Box3()
-            .setFromObject(
-                grupoCamiseta
-            )
-            .getSize(
-                new THREE.Vector3()
-            );
-
-
-    // ====================================
-    // ESCALA
-    // ====================================
-
-    // Anchura = 55%
-
-    const escalaX =
-        (anchuraTorso * 0.55) /
-        tamañoCamiseta.x;
-
-
-    // Altura = 90%
-
-    const escalaY =
-        (alturaTorso * 0.90) /
-        tamañoCamiseta.y;
-
-
-    // Profundidad = 60%
-
-    const escalaZ =
-        (profundidadTorso * 0.60) /
-        tamañoCamiseta.z;
-
-
-    grupoCamiseta.scale.set(
-        escalaX,
-        escalaY,
-        escalaZ
-    );
-
-
-    // ====================================
-    // POSICIÓN
-    // ====================================
-
-    grupoCamiseta.position.set(
-        posicionX,
-        posicionY,
-        posicionZ + 0.02
-    );
-
-
-    // ====================================
-    // AÑADIR A ESCENA
-    // ====================================
-
-    escena.add(
-        grupoCamiseta
     );
 }
 
 
-// ========================================
+// =====================================================
 // CARGAR AVATAR
-// ========================================
+// =====================================================
 
 const loader =
     new GLTFLoader();
@@ -501,36 +518,84 @@ loader.load(
         const avatar =
             gltf.scene;
 
+
         escena.add(
             avatar
         );
 
 
-        let topAvatar = null;
+        // -------------------------------------------------
+        // MEDIDAS AVATAR
+        // -------------------------------------------------
+
+        const cajaAvatar =
+            new THREE.Box3()
+                .setFromObject(avatar);
 
 
-        // =================================
+        const tamañoAvatar =
+            new THREE.Vector3();
+
+        cajaAvatar.getSize(
+            tamañoAvatar
+        );
+
+
+        const centroAvatar =
+            new THREE.Vector3();
+
+        cajaAvatar.getCenter(
+            centroAvatar
+        );
+
+
+        console.log(
+            "Anchura avatar:",
+            tamañoAvatar.x
+        );
+
+        console.log(
+            "Altura avatar:",
+            tamañoAvatar.y
+        );
+
+        console.log(
+            "Profundidad avatar:",
+            tamañoAvatar.z
+        );
+
+        console.log(
+            "Centro avatar:",
+            centroAvatar
+        );
+
+
+        // -------------------------------------------------
         // BUSCAR TORSO
-        // =================================
+        // -------------------------------------------------
+
+        let torso =
+            null;
+
 
         avatar.traverse(
             function(objeto) {
 
                 if (
-                    objeto.isMesh &&
                     objeto.name ===
                     "Wolf3D_Outfit_Top"
                 ) {
 
-                    topAvatar =
+                    torso =
                         objeto;
+
                 }
 
             }
         );
 
 
-        if (!topAvatar) {
+        if (!torso) {
 
             console.error(
                 "No se encontró Wolf3D_Outfit_Top"
@@ -540,64 +605,71 @@ loader.load(
         }
 
 
-        // =================================
+        // -------------------------------------------------
         // MEDIDAS DEL TORSO
-        // =================================
+        // -------------------------------------------------
 
-        const cajaTop =
+        const cajaTorso =
             new THREE.Box3()
-                .setFromObject(
-                    topAvatar
-                );
+                .setFromObject(torso);
 
 
-        const tamañoTop =
-            cajaTop.getSize(
-                new THREE.Vector3()
-            );
+        const tamañoTorso =
+            new THREE.Vector3();
+
+        cajaTorso.getSize(
+            tamañoTorso
+        );
 
 
-        const centroTop =
-            cajaTop.getCenter(
-                new THREE.Vector3()
-            );
+        const centroTorso =
+            new THREE.Vector3();
+
+        cajaTorso.getCenter(
+            centroTorso
+        );
 
 
         console.log(
             "Anchura torso:",
-            tamañoTop.x
+            tamañoTorso.x
         );
 
         console.log(
             "Altura torso:",
-            tamañoTop.y
+            tamañoTorso.y
         );
 
         console.log(
             "Profundidad torso:",
-            tamañoTop.z
+            tamañoTorso.z
         );
 
         console.log(
             "Centro torso:",
-            centroTop
+            centroTorso
         );
 
 
-        // =================================
+        // -------------------------------------------------
         // CREAR CAMISETA
-        // =================================
+        // -------------------------------------------------
 
         crearCamiseta(
 
-            tamañoTop.x,
-            tamañoTop.y,
-            tamañoTop.z,
+            tamañoTorso.x,
 
-            centroTop.x,
-            centroTop.y,
-            centroTop.z
+            tamañoTorso.y,
 
+            tamañoTorso.z,
+
+            centroTorso
+
+        );
+
+
+        escena.add(
+            grupoCamiseta
         );
 
     },
@@ -615,9 +687,9 @@ loader.load(
 );
 
 
-// ========================================
+// =====================================================
 // RESIZE
-// ========================================
+// =====================================================
 
 window.addEventListener(
     "resize",
@@ -629,6 +701,7 @@ window.addEventListener(
 
         camara.updateProjectionMatrix();
 
+
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
@@ -638,9 +711,9 @@ window.addEventListener(
 );
 
 
-// ========================================
+// =====================================================
 // ANIMACIÓN
-// ========================================
+// =====================================================
 
 function animar() {
 
@@ -656,9 +729,11 @@ function animar() {
     );
 }
 
+
 animar();
 
 </script>
 
 </body>
+
 </html>
