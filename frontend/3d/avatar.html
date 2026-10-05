@@ -18,222 +18,683 @@
 
 <body>
 
-    <script type="module">
+<script type="module">
 
-        // ==========================================
-        // IMPORTAR THREE.JS
-        // ==========================================
+import * as THREE from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-        import * as THREE from
-            "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import { GLTFLoader } from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js/+esm";
 
-        import { GLTFLoader } from
-            "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js/+esm";
-
-        import { OrbitControls } from
-            "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js/+esm";
+import { OrbitControls } from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js/+esm";
 
 
-        // ==========================================
-        // ESCENA
-        // ==========================================
+// ========================================
+// ESCENA
+// ========================================
 
-        const escena = new THREE.Scene();
+const escena = new THREE.Scene();
 
-        escena.background =
-            new THREE.Color(0xf3f1ed);
+escena.background =
+    new THREE.Color(0xf3f1ed);
 
 
-        // ==========================================
-        // CÁMARA
-        // ==========================================
+// ========================================
+// CÁMARA
+// ========================================
 
-        const camara =
-            new THREE.PerspectiveCamera(
-                45,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                1000
-            );
+const camara =
+    new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+    );
 
-        camara.position.set(
-            0,
-            1.5,
-            4
+camara.position.set(
+    0,
+    1.5,
+    4
+);
+
+
+// ========================================
+// RENDERIZADOR
+// ========================================
+
+const renderizador =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+renderizador.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderizador.setPixelRatio(
+    window.devicePixelRatio
+);
+
+document.body.appendChild(
+    renderizador.domElement
+);
+
+
+// ========================================
+// CONTROLES
+// ========================================
+
+const controles =
+    new OrbitControls(
+        camara,
+        renderizador.domElement
+    );
+
+controles.enableDamping = true;
+
+controles.dampingFactor = 0.05;
+
+controles.target.set(
+    0,
+    1,
+    0
+);
+
+
+// ========================================
+// ILUMINACIÓN
+// ========================================
+
+const luzPrincipal =
+    new THREE.DirectionalLight(
+        0xffffff,
+        3
+    );
+
+luzPrincipal.position.set(
+    3,
+    5,
+    4
+);
+
+escena.add(
+    luzPrincipal
+);
+
+
+const luzSuave =
+    new THREE.AmbientLight(
+        0xffffff,
+        1
+    );
+
+escena.add(
+    luzSuave
+);
+
+
+// ========================================
+// CREAR CAMISETA
+// ========================================
+
+function crearCamiseta() {
+
+    const grupoCamiseta =
+        new THREE.Group();
+
+
+    // Material
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color: 0xffffff
+        });
+
+
+    // ====================================
+    // CUERPO DE LA CAMISETA
+    // ====================================
+
+    const formaCuerpo =
+        new THREE.Shape();
+
+
+    formaCuerpo.moveTo(
+        -0.23,
+        -0.32
+    );
+
+    formaCuerpo.lineTo(
+        0.23,
+        -0.32
+    );
+
+    formaCuerpo.lineTo(
+        0.28,
+        0.28
+    );
+
+    formaCuerpo.lineTo(
+        0.18,
+        0.32
+    );
+
+    formaCuerpo.lineTo(
+        0.10,
+        0.22
+    );
+
+    formaCuerpo.lineTo(
+        -0.10,
+        0.22
+    );
+
+    formaCuerpo.lineTo(
+        -0.18,
+        0.32
+    );
+
+    formaCuerpo.lineTo(
+        -0.28,
+        0.28
+    );
+
+    formaCuerpo.closePath();
+
+
+    const geometriaCuerpo =
+        new THREE.ExtrudeGeometry(
+            formaCuerpo,
+            {
+                depth: 0.20,
+
+                bevelEnabled: true,
+
+                bevelThickness: 0.02,
+
+                bevelSize: 0.02,
+
+                bevelSegments: 2
+            }
         );
 
 
-        // ==========================================
-        // RENDERIZADOR
-        // ==========================================
+    const cuerpo =
+        new THREE.Mesh(
+            geometriaCuerpo,
+            material
+        );
 
-        const renderizador =
-            new THREE.WebGLRenderer({
-                antialias: true
-            });
+
+    cuerpo.position.z =
+        -0.10;
+
+
+    grupoCamiseta.add(
+        cuerpo
+    );
+
+
+    // ====================================
+    // MANGA IZQUIERDA
+    // ====================================
+
+    const geometriaManga =
+        new THREE.BoxGeometry(
+            0.16,
+            0.25,
+            0.20
+        );
+
+
+    const mangaIzquierda =
+        new THREE.Mesh(
+            geometriaManga,
+            material
+        );
+
+
+    mangaIzquierda.position.set(
+        -0.30,
+        0.20,
+        0
+    );
+
+
+    mangaIzquierda.rotation.z =
+        -0.30;
+
+
+    grupoCamiseta.add(
+        mangaIzquierda
+    );
+
+
+    // ====================================
+    // MANGA DERECHA
+    // ====================================
+
+    const mangaDerecha =
+        new THREE.Mesh(
+            geometriaManga,
+            material
+        );
+
+
+    mangaDerecha.position.set(
+        0.30,
+        0.20,
+        0
+    );
+
+
+    mangaDerecha.rotation.z =
+        0.30;
+
+
+    grupoCamiseta.add(
+        mangaDerecha
+    );
+
+
+    // ====================================
+    // POSICIÓN ACTUAL
+    // ====================================
+
+    grupoCamiseta.position.set(
+        0,
+        1.27,
+        0
+    );
+
+
+    escena.add(
+        grupoCamiseta
+    );
+
+
+    console.log(
+        "👕 Camiseta 3D creada"
+    );
+
+
+    return grupoCamiseta;
+}
+
+
+// Crear camiseta
+
+const camiseta =
+    crearCamiseta();
+
+
+// ========================================
+// CARGAR AVATAR
+// ========================================
+
+const loader =
+    new GLTFLoader();
+
+
+loader.load(
+
+    "models/cyborg.glb",
+
+
+    // ====================================
+    // AVATAR CARGADO
+    // ====================================
+
+    function (gltf) {
+
+        const avatar =
+            gltf.scene;
+
+
+        // Actualizamos las matrices
+
+        avatar.updateMatrixWorld(
+            true
+        );
+
+
+        // =================================
+        // MEDIDAS DEL AVATAR COMPLETO
+        // =================================
+
+        const caja =
+            new THREE.Box3();
+
+
+        caja.setFromObject(
+            avatar
+        );
+
+
+        const tamaño =
+            new THREE.Vector3();
+
+
+        caja.getSize(
+            tamaño
+        );
+
+
+        const centro =
+            new THREE.Vector3();
+
+
+        caja.getCenter(
+            centro
+        );
+
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "📏 MEDIDAS DEL AVATAR"
+        );
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "Anchura:",
+            tamaño.x
+        );
+
+        console.log(
+            "Altura:",
+            tamaño.y
+        );
+
+        console.log(
+            "Profundidad:",
+            tamaño.z
+        );
+
+        console.log(
+            "Centro X:",
+            centro.x
+        );
+
+        console.log(
+            "Centro Y:",
+            centro.y
+        );
+
+        console.log(
+            "Centro Z:",
+            centro.z
+        );
+
+        console.log(
+            "================================"
+        );
+
+
+        // =================================
+        // MOSTRAR PARTES DEL AVATAR
+        // =================================
+
+        console.log(
+            "🔎 PARTES DEL AVATAR:"
+        );
+
+
+        avatar.traverse(
+            function (objeto) {
+
+                if (
+                    objeto.isMesh ||
+                    objeto.isBone
+                ) {
+
+                    console.log(
+                        "•",
+                        objeto.name,
+                        "| tipo:",
+                        objeto.type
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =================================
+        // MEDIR ROPA SUPERIOR
+        // =================================
+
+        const parteSuperior =
+            avatar.getObjectByName(
+                "Wolf3D_Outfit_Top"
+            );
+
+
+        if (parteSuperior) {
+
+            // Actualizar matrices
+
+            parteSuperior.updateMatrixWorld(
+                true
+            );
+
+
+            // Crear caja
+
+            const cajaTop =
+                new THREE.Box3();
+
+
+            cajaTop.setFromObject(
+                parteSuperior
+            );
+
+
+            // Tamaño
+
+            const tamañoTop =
+                new THREE.Vector3();
+
+
+            cajaTop.getSize(
+                tamañoTop
+            );
+
+
+            // Centro
+
+            const centroTop =
+                new THREE.Vector3();
+
+
+            cajaTop.getCenter(
+                centroTop
+            );
+
+
+            // Mostrar datos
+
+            console.log(
+                "================================"
+            );
+
+            console.log(
+                "👕 MEDIDAS DEL TORSO"
+            );
+
+            console.log(
+                "================================"
+            );
+
+            console.log(
+                "Anchura:",
+                tamañoTop.x
+            );
+
+            console.log(
+                "Altura:",
+                tamañoTop.y
+            );
+
+            console.log(
+                "Profundidad:",
+                tamañoTop.z
+            );
+
+            console.log(
+                "Posición X:",
+                centroTop.x
+            );
+
+            console.log(
+                "Posición Y:",
+                centroTop.y
+            );
+
+            console.log(
+                "Posición Z:",
+                centroTop.z
+            );
+
+            console.log(
+                "================================"
+            );
+
+
+        } else {
+
+            console.error(
+                "❌ No se encontró Wolf3D_Outfit_Top"
+            );
+
+        }
+
+
+        // =================================
+        // AÑADIR AVATAR A LA ESCENA
+        // =================================
+
+        escena.add(
+            avatar
+        );
+
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "✅ Avatar cargado correctamente"
+        );
+
+        console.log(
+            "================================"
+        );
+
+    },
+
+
+    // ====================================
+    // PROGRESO DE CARGA
+    // ====================================
+
+    function (progreso) {
+
+        if (
+            progreso.total > 0
+        ) {
+
+            const porcentaje =
+                (
+                    progreso.loaded /
+                    progreso.total
+                ) * 100;
+
+
+            console.log(
+                "Cargando avatar:",
+                porcentaje.toFixed(0) + "%"
+            );
+
+        }
+
+    },
+
+
+    // ====================================
+    // ERROR
+    // ====================================
+
+    function (error) {
+
+        console.error(
+            "❌ Error cargando el avatar:",
+            error
+        );
+
+    }
+
+);
+
+
+// ========================================
+// ANIMACIÓN
+// ========================================
+
+function animar() {
+
+    requestAnimationFrame(
+        animar
+    );
+
+
+    controles.update();
+
+
+    renderizador.render(
+        escena,
+        camara
+    );
+
+}
+
+
+animar();
+
+
+// ========================================
+// CAMBIO DE TAMAÑO
+// ========================================
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camara.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+
+        camara.updateProjectionMatrix();
+
 
         renderizador.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
-        renderizador.setPixelRatio(
-            window.devicePixelRatio
-        );
+    }
+);
 
-        document.body.appendChild(
-            renderizador.domElement
-        );
-
-
-        // ==========================================
-        // CONTROLES
-        // ==========================================
-
-        const controles =
-            new OrbitControls(
-                camara,
-                renderizador.domElement
-            );
-
-        controles.enableDamping = true;
-
-        controles.dampingFactor = 0.05;
-
-        controles.target.set(
-            0,
-            1,
-            0
-        );
-
-
-        // ==========================================
-        // LUZ PRINCIPAL
-        // ==========================================
-
-        const luzPrincipal =
-            new THREE.DirectionalLight(
-                0xffffff,
-                3
-            );
-
-        luzPrincipal.position.set(
-            3,
-            5,
-            4
-        );
-
-        escena.add(luzPrincipal);
-
-
-        // ==========================================
-        // LUZ AMBIENTE
-        // ==========================================
-
-        const luzSuave =
-            new THREE.AmbientLight(
-                0xffffff,
-                1
-            );
-
-        escena.add(luzSuave);
-
-
-        // ==========================================
-        // CARGAR AVATAR
-        // ==========================================
-
-        const loader =
-            new GLTFLoader();
-
-        loader.load(
-
-            "models/cyborg.glb",
-
-            function (gltf) {
-
-                const avatar =
-                    gltf.scene;
-
-                escena.add(avatar);
-
-                console.log(
-                    "✅ Avatar cargado correctamente"
-                );
-
-            },
-
-            function (progreso) {
-
-                if (progreso.total > 0) {
-
-                    const porcentaje =
-                        (progreso.loaded /
-                            progreso.total) * 100;
-
-                    console.log(
-                        "Cargando avatar:",
-                        porcentaje.toFixed(0) + "%"
-                    );
-                }
-
-            },
-
-            function (error) {
-
-                console.error(
-                    "❌ Error cargando el avatar:",
-                    error
-                );
-
-            }
-        );
-
-
-        // ==========================================
-        // ANIMACIÓN
-        // ==========================================
-
-        function animar() {
-
-            requestAnimationFrame(
-                animar
-            );
-
-            controles.update();
-
-            renderizador.render(
-                escena,
-                camara
-            );
-        }
-
-        animar();
-
-
-        // ==========================================
-        // REDIMENSIONAR
-        // ==========================================
-
-        window.addEventListener(
-            "resize",
-            () => {
-
-                camara.aspect =
-                    window.innerWidth /
-                    window.innerHeight;
-
-                camara.updateProjectionMatrix();
-
-                renderizador.setSize(
-                    window.innerWidth,
-                    window.innerHeight
-                );
-
-            }
-        );
-
-    </script>
+</script>
 
 </body>
 
