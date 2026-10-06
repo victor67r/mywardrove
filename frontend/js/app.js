@@ -3,6 +3,10 @@ const API_URL = "http://localhost:8080/prendas";
 let prendaEditandoId = null;
 let guardandoPrenda = false;
 
+// Estado actual de los filtros
+let categoriaActual = "Todas";
+let textoBusqueda = "";
+
 
 // =====================================================
 // ELEMENTOS DEL DOM
@@ -22,6 +26,9 @@ const listaPrendas =
 
 const estadoSubida =
     document.getElementById("estado-subida");
+
+const buscadorPrendas =
+    document.getElementById("buscador-prendas");
 
 
 // =====================================================
@@ -570,7 +577,7 @@ async function subirImagen(archivo) {
 // =====================================================
 
 async function cargarPrendas(
-    categoriaSeleccionada = "Todas"
+    categoriaSeleccionada = categoriaActual
 ) {
 
     try {
@@ -606,7 +613,7 @@ async function cargarPrendas(
 
 
         // =================================================
-        // FILTRAR CATEGORÍA
+        // FILTRAR POR CATEGORÍA
         // =================================================
 
         let prendasFiltradas =
@@ -619,10 +626,59 @@ async function cargarPrendas(
         ) {
 
             prendasFiltradas =
-                prendas.filter(
+                prendasFiltradas.filter(
                     prenda =>
                         prenda.categoria ===
                         categoriaSeleccionada
+                );
+        }
+
+
+        // =================================================
+        // FILTRAR POR BUSCADOR
+        // =================================================
+
+        if (
+            textoBusqueda.trim() !== ""
+        ) {
+
+            const busqueda =
+                textoBusqueda
+                    .toLowerCase()
+                    .trim();
+
+
+            prendasFiltradas =
+                prendasFiltradas.filter(
+                    prenda => {
+
+                        const nombre =
+                            prenda.nombre
+                                ?.toLowerCase() || "";
+
+
+                        const categoria =
+                            prenda.categoria
+                                ?.toLowerCase() || "";
+
+
+                        const color =
+                            prenda.color
+                                ?.toLowerCase() || "";
+
+
+                        const marca =
+                            prenda.marca
+                                ?.toLowerCase() || "";
+
+
+                        return (
+                            nombre.includes(busqueda) ||
+                            categoria.includes(busqueda) ||
+                            color.includes(busqueda) ||
+                            marca.includes(busqueda)
+                        );
+                    }
                 );
         }
 
@@ -637,7 +693,7 @@ async function cargarPrendas(
 
             listaPrendas.innerHTML = `
                 <p class="sin-prendas">
-                    No hay prendas en esta categoría.
+                    No se encontraron prendas.
                 </p>
             `;
 
@@ -1049,14 +1105,33 @@ botonesCategoria.forEach(
                 );
 
 
-                const categoria =
+                categoriaActual =
                     boton.dataset.categoria;
 
 
                 cargarPrendas(
-                    categoria
+                    categoriaActual
                 );
             }
+        );
+    }
+);
+
+
+// =====================================================
+// BUSCADOR
+// =====================================================
+
+buscadorPrendas.addEventListener(
+    "input",
+    () => {
+
+        textoBusqueda =
+            buscadorPrendas.value;
+
+
+        cargarPrendas(
+            categoriaActual
         );
     }
 );
@@ -1147,6 +1222,11 @@ botonesOcasion.forEach(
 // CARGAR PRENDAS AL INICIAR
 // =====================================================
 
-document.addEventListener("DOMContentLoaded", () => {
-cargarPrendas();
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        cargarPrendas();
+
+    }
+);
