@@ -10,6 +10,12 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='80'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E"
+    >
+
     <title>My Wardrove</title>
 
     <link
@@ -86,7 +92,7 @@
                 </span>
 
                 <h2>
-                    Todo lo que tienes,<br>
+                    Todo lo que tienes,
                     <span>en un solo lugar.</span>
                 </h2>
 
@@ -116,7 +122,7 @@
 
 
         <!-- =================================================
-             CATEGORÍAS
+             CATEGORÍAS Y BÚSQUEDA
         ================================================== -->
 
         <section class="categorias">
@@ -272,13 +278,26 @@
 
 
             <!-- =================================================
-                 FORMULARIO
+                 FORMULARIO AÑADIR PRENDA
             ================================================== -->
 
             <div
                 id="formulario-prenda"
                 class="formulario-oculto"
             >
+
+                <!-- BOTÓN CERRAR -->
+
+                <button
+                    type="button"
+                    id="btn-cerrar-formulario"
+                    class="formulario-cerrar"
+                >
+                    ×
+                </button>
+
+
+                <!-- CABECERA -->
 
                 <div class="formulario-header">
 
@@ -297,8 +316,12 @@
                 </div>
 
 
+                <!-- CAMPOS -->
+
                 <div class="formulario-grid">
 
+
+                    <!-- NOMBRE -->
 
                     <div class="campo">
 
@@ -314,6 +337,8 @@
 
                     </div>
 
+
+                    <!-- CATEGORÍA -->
 
                     <div class="campo">
 
@@ -360,6 +385,8 @@
                     </div>
 
 
+                    <!-- COLOR -->
+
                     <div class="campo">
 
                         <label for="color">
@@ -375,6 +402,8 @@
                     </div>
 
 
+                    <!-- MARCA -->
+
                     <div class="campo">
 
                         <label for="marca">
@@ -389,6 +418,8 @@
 
                     </div>
 
+
+                    <!-- IMAGEN -->
 
                     <div class="campo campo-imagen">
 
@@ -407,6 +438,10 @@
 
                 </div>
 
+
+                <!-- =================================================
+                     BOTÓN GUARDAR
+                ================================================== -->
 
                 <div class="formulario-footer">
 
@@ -482,6 +517,10 @@
                 con las prendas de tu armario.
             </p>
 
+
+            <!-- =================================================
+                 OCASIONES
+            ================================================== -->
 
             <div class="ocasiones-container">
 

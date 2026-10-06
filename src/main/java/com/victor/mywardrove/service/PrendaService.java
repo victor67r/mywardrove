@@ -19,6 +19,15 @@ public class PrendaService {
         return prendaRepository.findAll();
     }
 
+    public Prenda obtenerPorId(Long id) {
+        return prendaRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "No se encontró la prenda con id: " + id
+                        )
+                );
+    }
+
     public Prenda guardar(Prenda prenda) {
         return prendaRepository.save(prenda);
     }

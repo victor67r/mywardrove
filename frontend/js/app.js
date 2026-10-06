@@ -18,6 +18,9 @@ const btnNuevaPrenda =
 const formularioPrenda =
     document.getElementById("formulario-prenda");
 
+const btnCerrarFormulario =
+    document.getElementById("btn-cerrar-formulario");
+
 const btnGuardarPrenda =
     document.getElementById("btn-guardar-prenda");
 
@@ -46,7 +49,32 @@ btnNuevaPrenda.addEventListener(
         btnGuardarPrenda.textContent =
             "Guardar prenda";
 
-        formularioPrenda.classList.toggle(
+        formularioPrenda.classList.remove(
+            "formulario-oculto"
+        );
+
+        formularioPrenda.classList.add(
+            "formulario-visible"
+        );
+
+        limpiarEstado();
+    }
+);
+
+
+// =====================================================
+// CERRAR FORMULARIO
+// =====================================================
+
+btnCerrarFormulario.addEventListener(
+    "click",
+    () => {
+
+        formularioPrenda.classList.remove(
+            "formulario-visible"
+        );
+
+        formularioPrenda.classList.add(
             "formulario-oculto"
         );
 
@@ -432,9 +460,17 @@ btnGuardarPrenda.addEventListener(
 
             prendaEditandoId = null;
 
+
+            // Cerrar modal
+
+            formularioPrenda.classList.remove(
+                "formulario-visible"
+            );
+
             formularioPrenda.classList.add(
                 "formulario-oculto"
             );
+
 
             btnGuardarPrenda.textContent =
                 "Guardar prenda";
@@ -919,8 +955,14 @@ async function editarPrenda(id) {
         ).value = "";
 
 
+        // Abrir formulario como modal
+
         formularioPrenda.classList.remove(
             "formulario-oculto"
+        );
+
+        formularioPrenda.classList.add(
+            "formulario-visible"
         );
 
 
@@ -929,12 +971,6 @@ async function editarPrenda(id) {
 
 
         limpiarEstado();
-
-
-        formularioPrenda.scrollIntoView({
-            behavior: "smooth"
-        });
-
 
     } catch (error) {
 

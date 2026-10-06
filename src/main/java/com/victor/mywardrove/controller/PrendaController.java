@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import java.nio.file.Files;
@@ -76,14 +75,58 @@ public class PrendaController {
 
 
     // ========================================
-    // ELIMINAR PRENDA
+    // ELIMINAR PRENDA + IMAGEN
     // ========================================
 
     @DeleteMapping("/{id}")
     public void eliminar(
             @PathVariable Long id) {
 
-        prendaService.eliminar(id);
+        try {
+
+            // Buscar la prenda antes de eliminarla
+            Prenda prenda =
+                    prendaService.obtenerPorId(id);
+
+            // Guardar el nombre de la imagen
+            String nombreImagen =
+                    prenda.getImagen();
+
+            // Eliminar la prenda de MySQL
+            prendaService.eliminar(id);
+
+            // Si tiene imagen, eliminarla también
+            if (nombreImagen != null
+                    && !nombreImagen.isBlank()) {
+
+                Path carpeta = Paths.get(
+                        "mywardrove",
+                        "uploads"
+                );
+
+                Path imagen =
+                        carpeta.resolve(nombreImagen);
+
+                if (Files.exists(imagen)) {
+
+                    Files.delete(imagen);
+
+                    System.out.println(
+                            "Imagen eliminada: "
+                                    + nombreImagen
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "No se pudo eliminar la prenda y su imagen",
+                    e
+            );
+        }
 
     }
 
@@ -222,7 +265,6 @@ public class PrendaController {
 
             String linea;
 
-
             while ((linea = lector.readLine()) != null) {
 
                 System.out.println(
@@ -309,7 +351,7 @@ public class PrendaController {
     // OBTENER IMAGEN
     // ========================================
 
-    @GetMapping("/imagen/{nombre}")
+    @GetMapping("/imagen/{nombre:.+}")
     public ResponseEntity<Resource> obtenerImagen(
             @PathVariable String nombre) {
 
@@ -381,6 +423,270 @@ public class PrendaController {
 
             throw new RuntimeException(
                     "No se pudo cargar la imagen",
+                    e
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // IMÁGENES EN USO
+    // ========================================
+
+    @GetMapping("/imagenes-en-uso")
+    public List<String> imagenesEnUso() {
+
+        List<Prenda> prendas =
+                prendaService.obtenerTodas();
+
+
+        return prendas.stream()
+                .map(Prenda::getImagen)
+                .filter(imagen ->
+                        imagen != null
+                )
+                .filter(imagen ->
+                        !imagen.isBlank()
+                )
+                .toList();
+
+    }
+
+
+    // ========================================
+    // IMÁGENES NO UTILIZADAS
+    // ========================================
+
+    @GetMapping("/imagenes-no-utilizadas")
+    public List<String> imagenesNoUtilizadas() {
+
+        try {
+
+            // --------------------------------
+            // CARPETA DE IMÁGENES
+            // --------------------------------
+
+            Path carpeta = Paths.get(
+                    "mywardrove",
+                    "uploads"
+            );
+
+
+            // --------------------------------
+            // OBTENER PRENDAS DE MYSQL
+            // --------------------------------
+
+            List<Prenda> prendas =
+                    prendaService.obtenerTodas();
+
+
+            // --------------------------------
+            // OBTENER IMÁGENES EN USO
+            // --------------------------------
+
+            List<String> imagenesEnUso =
+                    prendas.stream()
+                            .map(Prenda::getImagen)
+                            .filter(imagen ->
+                                    imagen != null
+                            )
+                            .filter(imagen ->
+                                    !imagen.isBlank()
+                            )
+                            .toList();
+
+
+            // --------------------------------
+            // BUSCAR IMÁGENES SIN USO
+            // --------------------------------
+
+            List<String> imagenesNoUtilizadas =
+                    Files.list(carpeta)
+                            .filter(Files::isRegularFile)
+                            .map(path ->
+                                    path.getFileName()
+                                            .toString()
+                            )
+                            .filter(nombre ->
+                                    !imagenesEnUso.contains(nombre)
+                            )
+                            .toList();
+
+
+            // --------------------------------
+            // MOSTRAR RESULTADO
+            // --------------------------------
+
+            System.out.println(
+                    "========================================"
+            );
+
+            System.out.println(
+                    "IMÁGENES NO UTILIZADAS:"
+            );
+
+            imagenesNoUtilizadas.forEach(
+                    nombre ->
+                            System.out.println(
+                                    " - " + nombre
+                            )
+            );
+
+            System.out.println(
+                    "========================================"
+            );
+
+
+            return imagenesNoUtilizadas;
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "No se pudieron comprobar las imágenes",
+                    e
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // LIMPIAR IMÁGENES NO UTILIZADAS
+    // ========================================
+
+    @DeleteMapping("/imagenes-no-utilizadas")
+    public List<String> eliminarImagenesNoUtilizadas() {
+
+        try {
+
+            // --------------------------------
+            // CARPETA DE IMÁGENES
+            // --------------------------------
+
+            Path carpeta = Paths.get(
+                    "mywardrove",
+                    "uploads"
+            );
+
+
+            // --------------------------------
+            // OBTENER PRENDAS DE MYSQL
+            // --------------------------------
+
+            List<Prenda> prendas =
+                    prendaService.obtenerTodas();
+
+
+            // --------------------------------
+            // OBTENER IMÁGENES EN USO
+            // --------------------------------
+
+            List<String> imagenesEnUso =
+                    prendas.stream()
+                            .map(Prenda::getImagen)
+                            .filter(imagen ->
+                                    imagen != null
+                            )
+                            .filter(imagen ->
+                                    !imagen.isBlank()
+                            )
+                            .toList();
+
+
+            // --------------------------------
+            // BUSCAR Y ELIMINAR SOBRANTES
+            // --------------------------------
+
+            List<String> imagenesEliminadas =
+                    Files.list(carpeta)
+                            .filter(Files::isRegularFile)
+                            .filter(path ->
+                                    !imagenesEnUso.contains(
+                                            path.getFileName()
+                                                    .toString()
+                                    )
+                            )
+                            .map(path -> {
+
+                                try {
+
+                                    String nombre =
+                                            path.getFileName()
+                                                    .toString();
+
+
+                                    Files.delete(path);
+
+
+                                    System.out.println(
+                                            "Imagen eliminada: "
+                                                    + nombre
+                                    );
+
+
+                                    return nombre;
+
+
+                                } catch (Exception e) {
+
+                                    throw new RuntimeException(
+                                            "No se pudo eliminar: "
+                                                    + path,
+                                            e
+                                    );
+
+                                }
+
+                            })
+                            .toList();
+
+
+            // --------------------------------
+            // MOSTRAR RESULTADO
+            // --------------------------------
+
+            System.out.println(
+                    "========================================"
+            );
+
+            System.out.println(
+                    "LIMPIEZA COMPLETADA"
+            );
+
+            System.out.println(
+                    "Imágenes eliminadas: "
+                            + imagenesEliminadas.size()
+            );
+
+
+            imagenesEliminadas.forEach(
+                    nombre ->
+                            System.out.println(
+                                    " - " + nombre
+                            )
+            );
+
+
+            System.out.println(
+                    "========================================"
+            );
+
+
+            return imagenesEliminadas;
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "No se pudieron limpiar las imágenes",
                     e
             );
 
