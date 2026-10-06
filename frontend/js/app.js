@@ -2,6 +2,7 @@ const API_URL = "http://localhost:8080/prendas";
 
 let prendaEditandoId = null;
 let guardandoPrenda = false;
+let armarioCargado = false;
 
 // Estado actual de los filtros
 let categoriaActual = "Todas";
@@ -32,6 +33,42 @@ const estadoSubida =
 
 const buscadorPrendas =
     document.getElementById("buscador-prendas");
+
+const btnVerArmario =
+    document.getElementById("btn-ver-armario");
+
+const seccionArmario =
+    document.getElementById("seccion-armario");
+
+
+// =====================================================
+// VER MI ARMARIO
+// =====================================================
+
+btnVerArmario.addEventListener(
+    "click",
+    async () => {
+
+        // Mostrar el armario
+        seccionArmario.classList.add(
+            "armario-visible"
+        );
+
+        // Solo cargar las prendas la primera vez
+        if (!armarioCargado) {
+
+            await cargarPrendas();
+
+            armarioCargado = true;
+        }
+
+        // Bajar hasta el armario
+        seccionArmario.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+);
 
 
 // =====================================================
@@ -93,7 +130,6 @@ btnGuardarPrenda.addEventListener(
 
         event.preventDefault();
 
-        // Evitar varios clics mientras se procesa
         if (guardandoPrenda) {
 
             console.log(
@@ -113,45 +149,37 @@ btnGuardarPrenda.addEventListener(
         estadoSubida.textContent =
             "⏳ Procesando prenda...";
 
-
         console.log(
             "1 - BOTÓN GUARDAR PULSADO"
         );
 
-
-        // =================================================
-        // OBTENER DATOS
-        // =================================================
-
         const nombre =
-            document
-                .getElementById("nombre")
-                .value
-                .trim();
+            document.getElementById(
+                "nombre"
+            ).value.trim();
 
         const categoria =
-            document
-                .getElementById("categoria")
-                .value;
+            document.getElementById(
+                "categoria"
+            ).value;
 
         const color =
-            document
-                .getElementById("color")
-                .value
-                .trim();
+            document.getElementById(
+                "color"
+            ).value.trim();
 
         const marca =
-            document
-                .getElementById("marca")
-                .value
-                .trim();
+            document.getElementById(
+                "marca"
+            ).value.trim();
 
         const inputImagen =
-            document.getElementById("imagen");
+            document.getElementById(
+                "imagen"
+            );
 
         const archivo =
             inputImagen.files[0];
-
 
         console.log(
             "2 - Nombre:",
@@ -178,10 +206,6 @@ btnGuardarPrenda.addEventListener(
             archivo
         );
 
-
-        // =================================================
-        // VALIDACIONES
-        // =================================================
 
         if (!nombre) {
 
@@ -248,7 +272,6 @@ btnGuardarPrenda.addEventListener(
                     );
 
 
-                // Mantener la imagen actual
                 if (prendaActual) {
 
                     nombreImagen =
@@ -256,7 +279,6 @@ btnGuardarPrenda.addEventListener(
                 }
 
 
-                // Si se selecciona una imagen nueva
                 if (archivo) {
 
                     estadoSubida.textContent =
@@ -345,17 +367,13 @@ btnGuardarPrenda.addEventListener(
 
 
                 // =================================================
-                // CREAR NUEVA PRENDA
+                // CREAR PRENDA
                 // =================================================
 
                 console.log(
                     "7 - Creando nueva prenda"
                 );
 
-
-                // -------------------------------------------------
-                // SUBIR Y PROCESAR IMAGEN
-                // -------------------------------------------------
 
                 if (archivo) {
 
@@ -379,6 +397,7 @@ btnGuardarPrenda.addEventListener(
                         nombreImagen
                     );
 
+
                 } else {
 
                     console.log(
@@ -386,10 +405,6 @@ btnGuardarPrenda.addEventListener(
                     );
                 }
 
-
-                // -------------------------------------------------
-                // CREAR OBJETO
-                // -------------------------------------------------
 
                 const nuevaPrenda = {
 
@@ -452,20 +467,15 @@ btnGuardarPrenda.addEventListener(
             }
 
 
-            // =================================================
-            // FINALIZAR
-            // =================================================
-
             limpiarFormulario();
 
             prendaEditandoId = null;
 
 
-            // Cerrar modal
-
             formularioPrenda.classList.remove(
                 "formulario-visible"
             );
+
 
             formularioPrenda.classList.add(
                 "formulario-oculto"
@@ -476,7 +486,11 @@ btnGuardarPrenda.addEventListener(
                 "Guardar prenda";
 
 
+            // Volvemos a cargar el armario
             await cargarPrendas();
+
+
+            armarioCargado = true;
 
 
             guardandoPrenda = false;
@@ -648,13 +662,13 @@ async function cargarPrendas(
         listaPrendas.innerHTML = "";
 
 
-        // =================================================
-        // FILTRAR POR CATEGORÍA
-        // =================================================
-
         let prendasFiltradas =
             prendas;
 
+
+        // =================================================
+        // FILTRO CATEGORÍA
+        // =================================================
 
         if (
             categoriaSeleccionada !==
@@ -671,7 +685,7 @@ async function cargarPrendas(
 
 
         // =================================================
-        // FILTRAR POR BUSCADOR
+        // BUSCADOR
         // =================================================
 
         if (
@@ -709,10 +723,28 @@ async function cargarPrendas(
 
 
                         return (
-                            nombre.includes(busqueda) ||
-                            categoria.includes(busqueda) ||
-                            color.includes(busqueda) ||
-                            marca.includes(busqueda)
+
+                            nombre.includes(
+                                busqueda
+                            )
+
+                            ||
+
+                            categoria.includes(
+                                busqueda
+                            )
+
+                            ||
+
+                            color.includes(
+                                busqueda
+                            )
+
+                            ||
+
+                            marca.includes(
+                                busqueda
+                            )
                         );
                     }
                 );
@@ -720,7 +752,7 @@ async function cargarPrendas(
 
 
         // =================================================
-        // NO HAY PRENDAS
+        // SIN RESULTADOS
         // =================================================
 
         if (
@@ -755,29 +787,29 @@ async function cargarPrendas(
                 );
 
 
-                // -------------------------------------------------
-                // IMAGEN
-                // -------------------------------------------------
-
                 let imagenHTML = "";
 
 
                 if (prenda.imagen) {
 
                     imagenHTML = `
+
                         <div class="imagen-prenda">
 
                             <img
                                 src="http://localhost:8080/prendas/imagen/${prenda.imagen}"
                                 alt="${prenda.nombre}"
+                                loading="lazy"
                             >
 
                         </div>
+
                     `;
 
                 } else {
 
                     imagenHTML = `
+
                         <div class="imagen-prenda">
 
                             <div class="sin-imagen">
@@ -785,13 +817,10 @@ async function cargarPrendas(
                             </div>
 
                         </div>
+
                     `;
                 }
 
-
-                // -------------------------------------------------
-                // INFORMACIÓN
-                // -------------------------------------------------
 
                 tarjeta.innerHTML = `
 
@@ -813,9 +842,11 @@ async function cargarPrendas(
                         ${
                             prenda.color
                                 ? `
+
                                     <p class="color">
                                         Color: ${prenda.color}
                                     </p>
+
                                   `
                                 : ""
                         }
@@ -824,9 +855,11 @@ async function cargarPrendas(
                         ${
                             prenda.marca
                                 ? `
+
                                     <p>
                                         Marca: ${prenda.marca}
                                     </p>
+
                                   `
                                 : ""
                         }
@@ -854,6 +887,7 @@ async function cargarPrendas(
                         </div>
 
                     </div>
+
                 `;
 
 
@@ -873,9 +907,11 @@ async function cargarPrendas(
 
 
         listaPrendas.innerHTML = `
+
             <p>
                 ❌ No se pudieron cargar las prendas.
             </p>
+
         `;
     }
 }
@@ -955,11 +991,10 @@ async function editarPrenda(id) {
         ).value = "";
 
 
-        // Abrir formulario como modal
-
         formularioPrenda.classList.remove(
             "formulario-oculto"
         );
+
 
         formularioPrenda.classList.add(
             "formulario-visible"
@@ -971,6 +1006,7 @@ async function editarPrenda(id) {
 
 
         limpiarEstado();
+
 
     } catch (error) {
 
@@ -1032,6 +1068,9 @@ async function eliminarPrenda(id) {
         await cargarPrendas();
 
 
+        armarioCargado = true;
+
+
     } catch (error) {
 
         console.error(
@@ -1087,10 +1126,14 @@ function resetearEstadoGuardar() {
 
     guardandoPrenda = false;
 
-    btnGuardarPrenda.disabled = false;
+
+    btnGuardarPrenda.disabled =
+        false;
+
 
     btnGuardarPrenda.textContent =
         "Guardar prenda";
+
 
     limpiarEstado();
 }
@@ -1250,19 +1293,5 @@ botonesOcasion.forEach(
                 );
             }
         );
-    }
-);
-
-
-// =====================================================
-// CARGAR PRENDAS AL INICIAR
-// =====================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        cargarPrendas();
-
     }
 );
